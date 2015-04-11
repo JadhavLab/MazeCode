@@ -16,16 +16,14 @@ int rewardWell= 0       % reward well
 int nowRewarding = 0 % keep track of reward being dispensed
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FUNCTIONS
 
 % -----------------------
-% Function Name: 	Two Port Error Flag
-% Description:		Both port 1 and 4 should never be on. This function throws an error
-% 					when both ports simultaneously shoot up to HIGH.
+% Function Name: 	Reward
+% Description:		This function administers reward to a marked well.
 % -----------------------
 
-
-
-% reward function
 function 1
 	nowRewarding = 1 % nowRewarding
 		portout[rewardWell]=1 % reward
@@ -35,12 +33,20 @@ function 1
 		end
 end;
 
+
+% -----------------------
+% Function Name: 	Reward first poke
+% Description:		This function adminsters reward to the first poke.
+% -----------------------
 function 2
 	if lastWell==0 do
 		rewardWell=currWell
 		trigger(1)
 	end
 end;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CALLBACKS -- EVENT-DRIVEN TRIGGERS
 
 callback portin[1] up
 	disp('portin1 up')

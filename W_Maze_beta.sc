@@ -1,7 +1,7 @@
 %	FileName: 		proto.sc
 %	Description:		Prototype of W-maze Code
 %	Authors:		Mark Z, Ryan Y
-%   Date Mod:		2/27/2015
+%   Date Mod:		4/12/2015
 %   ToDos: 			Add feedback portins. Shift port numbers in order to cluster together beembreak and feedback. Hunt for bugs.
 
 %%%%%%%%%%%%%%%%%%%%%%%%

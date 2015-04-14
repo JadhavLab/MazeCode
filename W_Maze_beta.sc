@@ -1,7 +1,7 @@
 %	FileName: 		proto.sc
 %	Description:		Prototype of W-maze Code
 %	Authors:		Mark Z, Ryan Y
-%   Date Mod:		4/12/2015
+%   Date Mod:		4/13/2015
 %   ToDos: 			Add feedback portins. Shift port numbers in order to cluster together beembreak and feedback. Hunt for bugs.
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -9,9 +9,9 @@
 %	 PORT DESCRIPTIONS
 % 
 %	 Inputs
-% 		portin[3] = Left arm's IR receiver
-%		portin[4] = Right arm's IR receiver
-%		portin[5] = Center arm's IR receiver
+% 		portin[1] = Left arm's IR receiver
+%		portin[2] = Right arm's IR receiver
+%		portin[3] = Center arm's IR receiver
 %
 %	Outputs
 %		portout[1] = Left arm's pump trigger
@@ -22,7 +22,7 @@
 
 %CONSTANTS
 
-int deliverPeriod = 1000   % blinking delay
+int deliverPeriod = 250   % blinking delay
 
 %VARIABLES
 
@@ -75,8 +75,8 @@ end;
 % TriggerDescription: 	Left Well is active!
 %
 
-callback portin[3] up
-	disp('Portin3 up - Left well on') 		% Print state of port to terminal
+callback portin[1] up
+	disp('Portin1 up - Left well on') 		% Print state of port to terminal
 
 	% Set current well
 	currWell=1							 % Left/1 well active
@@ -97,14 +97,14 @@ end;
 
 % TriggerDescription: 	Left well is inactive!
 %
-callback portin[3] down
+callback portin[1] down
 	nowRewarding=0 					%  Halt rewarding if animal leaves well
 
 		if rewardWell != 0 do
 			portout[rewardWell] = 0 	% Reset reward well- if not first trial
 		end
 
-	disp('Portin3 down - Left well off') 	% Print state of port to terminal
+	disp('Portin1 down - Left well off') 	% Print state of port to terminal
 
 	lastWell = 1 						% Well left, now last well
 	lastSideWell  = 1
@@ -112,10 +112,10 @@ end;
 
 
 
-% TriggerDescription: 	Right wellt is active!
+% TriggerDescription: 	Right well is active!
 %
-callback portin[4] up
-	disp('portin4 up')					% Print state of port to terminal
+callback portin[2] up
+	disp('portin2 up')					% Print state of port to terminal
 	trigger(1) 							% Run Error Check
 	
 	% Set current well
@@ -138,13 +138,13 @@ end;
 
 % TriggerDescription: Right well is inactive!
 %
-callback portin[4] down
+callback portin[2] down
 
 	nowRewarding = 0 					%  Halt rewarding if animal leaves well
 		if rewardWell != 0 do
 			portout[rewardWell] = 0 	% Reset reward well- if not first trial
 		end
-	disp('Portin4 down - Right well off')
+	disp('Portin2 down - Right well off')
 	lastWell=2 							% Well left, now last well
 	lastSideWell = 2
 end;
@@ -153,8 +153,8 @@ end;
 
 % TriggerDescription: 	Center well is active!
 %
-callback portin[5] up
-	disp('Portin5 up - Center well on') 	% Print state of port 5
+callback portin[3] up
+	disp('Portin3 up - Center well on') 	% Print state of port 5
 
 	% Set current well
 	currWell = 3
@@ -173,7 +173,7 @@ end;
 
 % TriggerDescription: 	Center well is inactive!
 %
-callback portin[5] down
+callback portin[3] down
 
 	% Shutting the reward down
 	nowRewarding = 0
@@ -181,7 +181,7 @@ callback portin[5] down
 			portout[rewardWell] = 0
 		end
 	
-	disp('Portin5 down - Center well off'')		% Print state of port 5
+	disp('Portin3 down - Center well off'')		% Print state of port 5
 
 	lastWell=3								% Well center is now the last well	
 

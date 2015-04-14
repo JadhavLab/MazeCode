@@ -10,13 +10,13 @@
 % 
 %	 Inputs
 % 		portin[1] = Left arm's IR receiver
-%		portin[2] = Right arm's IR receiver
-%		portin[3] = Center arm's IR receiver
+%		portin[2] = Center arm's IR receiver
+%		portin[3] = Right arm's IR receiver
 %
 %	Outputs
 %		portout[1] = Left arm's pump trigger
-%		portout[2] = Right arm's pump trigger
-%		portout[3] = Center arm's pump trigger
+%		portout[2] = Center arm's pump trigger
+%		portout[3] = Right arm's pump trigger
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -27,8 +27,8 @@ int deliverPeriod = 250   % blinking delay
 %VARIABLES
 
 % vars for tracking behavior in maze
-int lastSideWell= 0           % 1 if left, 2 if right ... this variable tracks the previously activated side well.
-int lastWell=0		 	% 1 if left, 2 if right, 3 if center ... this variable trackes the previously activated well
+int lastSideWell= 0           % 1 if left, 3 if right ... this variable tracks the previously activated side well.
+int lastWell=0		 	% 1 if left, 3 if right, 2 if center ... this variable trackes the previously activated well
 int currWell= 0            	% current well 	... this variable keeps track of when a well was made active.
 
 % vars for tracking where and how much reward
@@ -84,8 +84,8 @@ callback portin[1] up
 	% Should we reward?
 	trigger(2) 							% Reward if first poke
 	
-	if lastWell == 3 do					% Check if previous well = center
-		if lastSideWell == 2	do			% Check if side last visited = right
+	if lastWell == 2 do					% Check if previous well = center
+		if lastSideWell == 3	do			% Check if side last visited = right
 			disp('Rewarding Well Left')
 			rewardWell=1 				% dispense reward from here
 			trigger(1)					% trigger reward
@@ -98,7 +98,6 @@ end;
 % TriggerDescription: 	Left well is inactive!
 %
 callback portin[1] down
-	nowRewarding=0 					%  Halt rewarding if animal leaves well
 
 		if rewardWell != 0 do
 			portout[rewardWell] = 0 	% Reset reward well- if not first trial
@@ -112,22 +111,57 @@ end;
 
 
 
-% TriggerDescription: 	Right well is active!
+% TriggerDescription: 	Center well is active!
 %
 callback portin[2] up
-	disp('portin2 up')					% Print state of port to terminal
-	trigger(1) 							% Run Error Check
-	
+	disp('Portin2 up - Center well on') 	% Print state of port 2
+
 	% Set current well
-	currWell = 2 						% Set currently active well
+	currWell = 2
 
 	% Should we reward?
 	trigger(2) 							% Reward if first poke
 	
-	if lastWell == 3 do					% Did animal last visit center arm?				
+	if lastWell == 1 || lastWell == 3 do 	% Did the animal previously visit left/right arm?
+		disp('Rewarding Well Center')
+		rewardWell = 2
+		trigger(1)
+	end
+
+end;
+
+
+% TriggerDescription: 	Center well is inactive!
+%
+callback portin[2] down
+
+	% Shutting the reward down
+		if rewardWell != 0 do 
+			portout[rewardWell] = 0
+		end
+	
+	disp('Portin2 down - Center well off'')		% Print state of port 2
+
+	lastWell=2								% Well center is now the last well	
+
+end;
+
+% TriggerDescription: 	Right well is active!
+%
+callback portin[3] up
+	disp('portin3 up')					% Print state of port to terminal
+	trigger(1) 							% Run Error Check
+	
+	% Set current well
+	currWell = 3 						% Set currently active well
+
+	% Should we reward?
+	trigger(2) 							% Reward if first poke
+	
+	if lastWell == 2 do					% Did animal last visit center arm?				
 		if lastSideWell == 1	do			% Was previous side arm left?
 			disp('Rewarding Well Right')
-			rewardWell=2 				% Dispense reward from here
+			rewardWell=3 				% Dispense reward from here
 			trigger(1) 					% Trigger reward
 		end
 	end
@@ -138,53 +172,16 @@ end;
 
 % TriggerDescription: Right well is inactive!
 %
-callback portin[2] down
+callback portin[3] down
 
-	nowRewarding = 0 					%  Halt rewarding if animal leaves well
 		if rewardWell != 0 do
 			portout[rewardWell] = 0 	% Reset reward well- if not first trial
 		end
-	disp('Portin2 down - Right well off')
-	lastWell=2 							% Well left, now last well
-	lastSideWell = 2
+	disp('Portin3 down - Right well off')
+	lastWell=3 							% Well left, now last well
+	lastSideWell = 3
 end;
 
 
-
-% TriggerDescription: 	Center well is active!
-%
-callback portin[3] up
-	disp('Portin3 up - Center well on') 	% Print state of port 5
-
-	% Set current well
-	currWell = 3
-
-	% Should we reward?
-	trigger(2) 							% Reward if first poke
-	
-	if lastWell == 1 || lastWell == 2 do 	% Did the animal previously visit left/right arm?
-		disp('Rewarding Well Center')
-		rewardWell = 3
-		trigger(1)
-	end
-
-end;
-
-
-% TriggerDescription: 	Center well is inactive!
-%
-callback portin[3] down
-
-	% Shutting the reward down
-	nowRewarding = 0
-		if rewardWell != 0 do 
-			portout[rewardWell] = 0
-		end
-	
-	disp('Portin3 down - Center well off'')		% Print state of port 5
-
-	lastWell=3								% Well center is now the last well	
-
-end;
 
 

@@ -5,7 +5,7 @@
 
 %CONSTANTS
 
-int deliverPeriod= 1000   % how long to deliver the reward
+int deliverPeriod= 250   % how long to deliver the reward
 
 %VARIABLES
 

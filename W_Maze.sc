@@ -1,6 +1,6 @@
 
 
-int deliverPeriod = 375  % blinking delay
+int deliverPeriod = 375  % reward duration- adjust this based on pump
 
 %VARIABLES
 
@@ -62,14 +62,14 @@ callback portin[1] up
 			trigger(1)					% trigger reward
 		end
 	end
-end;
+end
 
 
 callback portin[1] down
 	disp('Portin1 down - Left well off') 	% Print state of port to terminal
 	lastWell = 1 						% Well left, now last well
 	lastSideWell  = 1
-end;
+end
 
 
 
@@ -88,12 +88,12 @@ callback portin[2] up
 		trigger(1)
 	end
 
-end;
+end
 
 callback portin[2] down
 	disp('Portin2 down - Center well off'')		% Print state of port 2
 	lastWell=2								% Well center is now the last wel
-end;
+end
 
 callback portin[3] up
 	disp('portin3 up')					% Print state of port to terminal
@@ -112,7 +112,7 @@ callback portin[3] up
 		end
 	end
 
-end;   
+end
 
 
 callback portin[3] down

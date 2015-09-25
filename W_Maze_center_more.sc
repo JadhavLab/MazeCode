@@ -1,6 +1,9 @@
 
 
-int deliverPeriod = 375  % blinking delay
+int deliverPeriod_others = 500  % blinking delay
+int deliverPeriod_center = 1000
+
+int deliverVariable = 0
 
 %VARIABLES
 
@@ -21,12 +24,19 @@ int count= 0                	% blink count
 
 function 1
 	nowRewarding = 1 							% nowRewarding
-		portout[rewardWell]=1 					% reward
-		do in deliverPeriod 						% do after waiting deliverPeriod milliseconds
-			portout[rewardWell]=0 				% reset reward
-			nowRewarding=0 					% no longer rewarding
-		end
-end;
+	
+	if rewardWell == 1 || rewardWell == 3 do
+		deliverVariable = deliverPeriod_others
+	else do
+		deliverVariable = deliverPeriod_center
+	end
+
+	portout[rewardWell]=1 					% reward
+	do in deliverVariable 						% do after waiting deliverPeriod milliseconds
+		portout[rewardWell]=0 				% reset reward
+		nowRewarding=0 					% no longer rewarding
+	end
+end
 
 
 
@@ -35,7 +45,7 @@ function 2
 		rewardWell=currWell
 		trigger(1)
 	end
-end;
+end
 
 function 3
 	if lastSideWell == 0 && (currWell==1 || currWell == 3) do
@@ -43,7 +53,7 @@ function 3
 		trigger(1)
 	end
 
-end;
+end
 
 
 callback portin[1] up
@@ -62,14 +72,14 @@ callback portin[1] up
 			trigger(1)					% trigger reward
 		end
 	end
-end;
+end
 
 
 callback portin[1] down
 	disp('Portin1 down - Left well off') 	% Print state of port to terminal
 	lastWell = 1 						% Well left, now last well
 	lastSideWell  = 1
-end;
+end
 
 
 
@@ -88,12 +98,12 @@ callback portin[2] up
 		trigger(1)
 	end
 
-end;
+end
 
 callback portin[2] down
 	disp('Portin2 down - Center well off'')		% Print state of port 2
 	lastWell=2								% Well center is now the last wel
-end;
+end
 
 callback portin[3] up
 	disp('portin3 up')					% Print state of port to terminal
@@ -112,7 +122,7 @@ callback portin[3] up
 		end
 	end
 
-end;   
+end  
 
 
 callback portin[3] down

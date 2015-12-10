@@ -1,4 +1,16 @@
 function setWidth(width)
 
-    width = round(width/1000);
-    sendScQtControlMessage('variableWidth = ' num2st(width));
+    global masterWidth;
+    global masterFreq;
+
+    masterWidth = round(width);
+    
+%     if masterWidth > masterFreq
+%         return
+%     end
+    
+    sendScQtControlMessage(['stimWidth = ', num2str( masterWidth ), ';']);
+    
+    disp('New width set!');
+    
+end

@@ -1,4 +1,4 @@
-function exampleScQtCallback(newLine)
+function adaptedScQtCallback(newLine)
 
 %Required global variables
 global scQtHistory; %multipurpose place to store processed event history

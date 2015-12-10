@@ -29,6 +29,11 @@ int variableWidth = 0
 
 function 1
 
+	disp('stimWidth = ')
+	disp(stimWidth)
+	disp('stimFreq = ')
+	disp(stimFreq)
+
 	% if you want the laser on longer than the on/off time, or these vars don't exist yet do
 	if stimWidth >= stimFreq || stimWidth== 0 || stimFreq== 0 || isRunning==1 do
 	
@@ -133,24 +138,13 @@ callback portin[7] down
 end;
 
 callback portin[8] up
-	disp('portin 8 down')
+	disp('portin 8 up')
 	disp('  ... variable stimulation ... ')
-	stimFreq = variableFreq
 	trigger(1)
 	
 end;
 
 callback portin[8] down
-end;	
-
-callback portin[9] up
-	disp('portin 7 down')
-	disp('  ... variable stimulation ... ')
-	stimWidth = variableWidth
-	trigger(1)
-	
-end;
-
-callback portin[9] down
+	disp('Portin 8 down')
 end;	
 

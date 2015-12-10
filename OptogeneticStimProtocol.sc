@@ -12,7 +12,12 @@ int expDuration= 20000    % duration of experiment in ms
 int totalDuration= 0           % duration of current stimulation 
 int stimWidth= 0                % stimulation duration    [100ms, 500ms, 1000ms]
 int stimFreq= 0                  % stimulation frequency [0.1Hz, 0.2Hz, 1Hz, 4Hz]
-int isRunning= 0                % function execution lockout 
+int isRunning= 0                % function execution lockout
+
+%% CALLBACK VARIABLES
+
+int variableFreq = 0
+int variableWidth = 0
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FUNCTIONS
@@ -125,5 +130,27 @@ callback portin[7] up
 end;
 callback portin[7] down
 	disp('portin7 down')
-end;		
+end;
+
+callback portin[8] up
+	disp('portin 8 down')
+	disp('  ... variable stimulation ... ')
+	stimFreq = variableFreq
+	trigger(1)
+	
+end;
+
+callback portin[8] down
+end;	
+
+callback portin[9] up
+	disp('portin 7 down')
+	disp('  ... variable stimulation ... ')
+	stimWidth = variableWidth
+	trigger(1)
+	
+end;
+
+callback portin[9] down
+end;	
 

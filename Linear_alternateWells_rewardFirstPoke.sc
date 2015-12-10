@@ -56,8 +56,8 @@ callback portin[1] up
 		disp('Poke 1 rewarded')
 		rewardWell=1 % dispense reward from here
 		trigger(1)% trigger reward
-	else
-		disp('Poke 2 no rewarded')
+	else do
+		disp('Poke 2 not rewarded')
 	end
 end;
 

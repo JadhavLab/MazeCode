@@ -50,19 +50,26 @@ if (~isempty(strfind(newLine,'Poke')))
         %count the number of trials sisnce the last switch
         scTrialcount = scTrialcount+1;
         
-        reward_trace = cumsum(scQtHisotry(:,2) == 1);
-        no_reward_trace = cumsum(scQtHisotry(:,2) == 1);
+        reward_trace = cumsum(scQtHistory(:,2) == 1);
+        scQtHistory
+        scQtHistory(:,2) == 0
+        no_reward_trace = cumsum(scQtHistory(:,2) == 0);
         
-        figure(1);
-        plot(reward_trace/scTrialcount);
-        plot(no_reward_trace/scTrialcount);
+        figure(1); hold off;
+        plot(reward_trace/scTrialcount ,'b:o'); hold on;
+        plot(no_reward_trace/scTrialcount ,'r:s');
         
-        text(1,0.5,sprintf('Rewarded = %d', reward_trace(end)));
-        text(1,1,sprintf('Not Rewarded = %d', no_reward_trace(end)));
-        text(1,0,sprintf('Rewarded = %d', reward_trace(end)));
+        a =gca;
+        mess1_height = 2*(a.YLim(2) - a.YLim(1))/5;
+        mess2_height = 3*(a.YLim(2) - a.YLim(1))/5;
+        mess3_height = 4*(a.YLim(2) - a.YLim(1))/5;
+        text(1,mess2_height,sprintf('Rewarded = %d', reward_trace(end)));
+        text(1,mess1_height,sprintf('Not Rewarded = %d', no_reward_trace(end)));
+%         text(1,mess3_height,sprintf('Total = %d', scQtHistory));
         
+        axis([-inf inf 0 1]);
         xlabel('Trial Number'); ylabel('Proportion in Type');
-        title('Reward Versus No Reward');
+        title('Cumulative Record');
         
         
 %         if (scTrialcount >= 2)

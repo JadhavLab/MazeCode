@@ -57,10 +57,12 @@ callback portin[1] up
 	
 	if lastWell == 2 do					% Check if previous well = center
 		if lastSideWell == 3	do			% Check if side last visited = right
-			disp('Rewarding Well Left')
+			disp('Poke 1 rewarded - left ')
 			rewardWell=1 				% dispense reward from here
 			trigger(1)					% trigger reward
 		end
+	else do
+		disp('Poke 1 not rewarded')
 	end
 end
 
@@ -83,9 +85,11 @@ callback portin[2] up
 	trigger(2) 							% Reward if first poke
 	
 	if lastWell == 1 || lastWell == 3 do 	% Did the animal previously visit left/right arm?
-		disp('Rewarding Well Center')
+		disp('Poke 2 rewarded - center')
 		rewardWell = 2
 		trigger(1)
+	else do
+		disp('Poke 2 not rewarded - center')
 	end
 
 end
@@ -109,6 +113,8 @@ callback portin[3] up
 			disp('Rewarding Well Right')
 			rewardWell=3 				% Dispense reward from here
 			trigger(1) 					% Trigger reward
+		else do
+			disp('Poke 3 not rewarded - right')
 		end
 	end
 
@@ -117,7 +123,7 @@ end
 
 callback portin[3] down
 	disp('Portin3 down - Right well off')
-	lastWell=3 							% Well left, now last well
+	lastWell=3 							% Well right, now last well
 	lastSideWell = 3
 end;
 

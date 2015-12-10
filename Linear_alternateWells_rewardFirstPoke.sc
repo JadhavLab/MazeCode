@@ -53,9 +53,11 @@ callback portin[1] up
 	currWell=1 % well currently active
 	trigger(2)
 	if lastWell == 2 do
-		disp('Rewarding Well 1')
+		disp('Poke 1 rewarded')
 		rewardWell=1 % dispense reward from here
 		trigger(1)% trigger reward
+	else
+		disp('Poke 2 no rewarded')
 	end
 end;
 
@@ -69,9 +71,11 @@ callback portin[2] up
 	currWell=2 % well currently active
 	trigger(2)
 	if lastWell == 1 do
-		disp('Rewarding Well 2')
+		disp('Poke 2 rewarded')
 		rewardWell=2 % dispense reward from here
 		trigger(1) % trigger reward
+	else do
+		disp('Poke 2 not rewarded')
 	end
 end;
 

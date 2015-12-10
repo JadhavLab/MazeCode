@@ -1,0 +1,7 @@
+function setHerz(freq)
+
+    freq = 
+    
+    sendScQtControlMessage('variableFreq = ' num2st(freq));
+    
+end

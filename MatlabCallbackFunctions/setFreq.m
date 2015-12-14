@@ -1,4 +1,4 @@
-function setHerz(freq)
+function setFreq(freq)
 
     global masterFreq;
 %     global masterWidth;

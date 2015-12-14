@@ -5,7 +5,7 @@
 
 %CONSTANTS
 
-int laserOnTime= 1000   % how long laser is on
+int laserOnTime= 500   % how long laser is on
 
 %VARIABLES
 

@@ -14,71 +14,124 @@
 %%   VARIABLE SECTION
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 % ---------------------
 % Digital Input Assignments
 % ----------------------
-int sample_arm = 1;
-int left_arm = 2;
-int right_arm  = 3;
-
+int sample_arm = 1
+int left_arm = 2
+int right_arm  = 3
 % ---------------------
 % Digital Output Assigments
 % ----------------------
-int left_reward = 1;
-int right_reward = 2;
+int left_reward =  1
+int right_reward = 2
+
 
 % ---------------------
 % Odorant Delivery Parameters
 % ----------------------
 int smell_delivery_period = 2000; % milliseconds
-
+int smell_one = 3
+int smell_two = 4
 % ---------------------
 % Odor to Path Variables
 % ----------------------
-int PATH_ONE_ODOR = 1;
-int PATH_TWO_ODOR = 2;
+int LEFT_PATH_ODOR = 1
+int RIGHT_PATH_ODOR = 2
+
+
+% ---------------------
+% Reward Parameters
+% ---------------------
+int reward_time = 200
+int time_until_reset = 200000
+
 
 % ---------------------
 % Behavior Trackers
 % ---------------------
-int sampled_smell = 0;
-
+int sampled_well = 0
+int last_sampled_smell = 0
+int current_time = 0
 % ---------------------
 % Apparatus Tracker
 % ----------------------
-int smell_picked = 0;
+int smell_picked = 0
+inr smell_digital_out = 0;
 
-%% DETECTION OF POKE
-% When a poke is detected, we will select a smell to randomly
-% associate with the smell port.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%   CALLBACK SECTION
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-callback portin[sample_arm]
+%% DETECTION OF POKE
+% When a poke is detected, we will select a smell to randomly
+% administer
 
-    if sampled_smell do
+% Sample Arm Callback
+callback portin[1]
+
+	current_time = clock()
+
+    if sampled_well || ((current_time - time_sampled_well) > time_until_reset)  do
+
         % Pick random smell
-        smell_picked = random(2);
+        smell_picked = random(1) + 1
 
         % Administer smell selected
-        trigger(2);
+        trigger(2)				% Trigger Function 2: AdminsterSmell
+
+		% Record time sampled smell
+		last_sampled_smell = clock()
 
     else do
         % NOTHING, rat already got a whiff of the sample
+		% depending on how hard the task is, to shape, we might add
+		% optional code to this section to allow the rat to come back
+		% and be re-adminstered the same smell until the rat actually
+		% pokes a well. No doubt this would help shaping in early epochs
+		% when animal is still learning.
     end
 
+end;
+
+%% DOES ANIMAL CORRECTLY ASSOCIATE?
+
+% LEFT ARM Callback
+callback portin[2]
+
+	% Describe what's about to happen for matlab callback functions
+	disp('Port 2 Rewarding -- Correct Left Odor Path ...')
+	disp(' ... for smell')
+	disp(smell_picked)
+
+	% Adminster reward
+	do in reward_time
+		portout[2] = 1
+	then
+		portout[2] = 0
+	end
 
 end;
 
-callback portin[left_arm]
+% RIGHT ARM Callback
+callback portin[3]
+	
+	if smell_picked == RIGHT_ODOR_PATH
+		
+		% Describe what's about to happen for matlab callback functions
+		disp('Port 3 Rewarding -- Correct Right Odor Path ...')
+		disp(' ... for smell')
+		disp(smell_picked)
 
-
-end;
-
-callback portin[right_arm]
-
+		% Adminster reward
+		do in reward_time
+			portout[3] = 1
+		then
+			portout[3] = 0
+		end				
+	end
 
 end;
 
@@ -86,19 +139,22 @@ end;
 %%   HELPER FUNCTION SECTION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% ---------------------
-% Name:      ChooseRandomScent (1)
-% Purpose:   Select a random scent to trigger
-% ---------------------
-function 1
-end
 
 % ---------------------
 % Name:      AdministerSmell (1)
-% Purpose:   Select a random scent to trigger
+% Purpose:   Output to whichever digital port
+% 		controls our particular smell
 % ---------------------
 function 2
-    do in smell_deliever_period
-         portout[smell_picked] = 1;
+    
+    if smell_picked == 1
+	smell_digital_out = smell_one
+    else if smell_picked == 2
+	smell_digital_out = smell_two
     end
-end
+
+    do in smell_deliever_period
+         portout[smell_digital_out] = 1
+    end
+end;
+

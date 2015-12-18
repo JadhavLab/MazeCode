@@ -108,9 +108,9 @@ callback portin[2]
 
 	% Adminster reward
 	do in reward_time
-		portout[2] = 1
+		portout[left_reward] = 1
 	then
-		portout[2] = 0
+		portout[left_reward] = 0
 	end
 
 end;
@@ -127,9 +127,9 @@ callback portin[3]
 
 		% Adminster reward
 		do in reward_time
-			portout[3] = 1
+			portout[right_reward] = 1
 		then
-			portout[3] = 0
+			portout[right_reward] = 0
 		end				
 	end
 

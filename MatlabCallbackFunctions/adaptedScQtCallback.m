@@ -149,3 +149,23 @@ end
         % TODO
     end
 
+    function path_mat = getPathMat(portStateVector)
+        
+        % Change all 1's marking a reward event in their respective column
+        % to their respective port number
+        ports = 1:size(portStateVector,2);
+        positionVisits = portStateVector*ports';
+
+        %% create [(initial, final); (initial final); ... ] matrix
+        initial_final = zeros( numel(positionVisits) - 1, 2);
+        initial_final(:,1) = positionVisits(1:end-1);
+        initial_final(:,2) = positionVisits(2:end);
+
+%         %% remove all repeats
+%         repeat_locs = arrayfun(@(x) initial_final(x,1) == initial_final(x,2), ...
+%             1:size(initial_final,1) );
+%         initial_final(repeat_locs,:) = [];
+
+        path_mat = initial_final;
+    end
+

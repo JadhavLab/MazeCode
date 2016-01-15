@@ -47,13 +47,22 @@ if (~isempty(strfind(newLine,'Poke')))
     end   
     
     if (atRewardPort == 1)
-        %count the number of trials sisnce the last switch
+        
+        %% Update relevant global variables
+        
+        % count the number of trials sisnce the last switch
         scTrialcount = scTrialcount+1;
         
+        % produce total number of rewarded and unrewarded well events
         reward_trace = cumsum(scQtHistory(:,2) == 1);
-        scQtHistory
-        scQtHistory(:,2) == 0
         no_reward_trace = cumsum(scQtHistory(:,2) == 0);
+        
+        % potentially print debug relate messages
+        % scQtHistory
+        % scQtHistory(:,2) == 0
+        
+        
+        %% Figure: Generate cumulative reward record.
         
         figure(1); hold off;
         plot(reward_trace/scTrialcount ,'b:o'); hold on;
@@ -70,6 +79,32 @@ if (~isempty(strfind(newLine,'Poke')))
         axis([-inf inf 0 1]);
         xlabel('Trial Number'); ylabel('Proportion in Type');
         title('Cumulative Record');
+        
+        %% Figure: Generate Well Specific Cumulative Reward
+        
+        % acquire well-specific information
+        targetVsReward_mat = getPortStateVector(scQtHistory);
+        
+        figure(2); hold off;
+        
+        wells = targetVsReward_mat(1:size(targetVsReward_mat,2));
+        cum_well_rewards = cumsum(targetVsReward_mat,1);
+        
+        % generate bar graph of rewards
+        bar(wells, cum_well_rewards(end,:));
+        title('Well Specific Reward Count');
+        xlabel('Wells');
+        ylabel('Reward #');
+        
+%         % generate history graph of rewards
+%         figure(3); hold off;
+%         
+%         plot(wells, cum_well_rewards);
+%         title('Cumulative Record Per Well');
+        
+        
+        
+        %% Figure: Generate Trajectory Specific Cumulative Reward
         
         
 %         if (scTrialcount >= 2)
@@ -91,4 +126,26 @@ if (~isempty(strfind(newLine,'Poke')))
                     
     end
 end
+
+%% HELPER FUNCTIONS
+
+    function targetVsReward_mat = getPortStateVector(historyMatrix)
+        
+        ports = historyMatrix(:,1);
+        reward_contingency = historyMatrix(:,2);
+        
+        uniqPorts = unique(ports);
+        
+        targetVsReward_mat = NaN * ones(numel(reward_contingency, ...
+            max(uniquePorts)));
+        for p = uniqPorts
+            port_loc = ports==p;
+            targetVsReward_mat(:,p) = reward_contingency(port_loc);
+        end
+        
+    end
+
+    function trajVsReward_mat = getTrajectoryStateVector()
+        % TODO
+    end
 

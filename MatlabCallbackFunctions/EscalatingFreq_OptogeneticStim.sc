@@ -1,18 +1,19 @@
 % PROGRAM NAME: 	OPTOGENETICSSTIMPROTOCOL
 % AUTHOR: 			MCZ
 % DESCRIPTION:          Will pulse the laser at a specified pulse frequency and pulse duration for a specified amount of time. 
-%                                        Inputs mapped:  1 2 3 4 = [0.1Hz, 0.2Hz, 1Hz, 4Hz]
-%                                                                      5 6 7 = [100ms, 500ms, 1000ms]
+%                                        Inputs mapped:  1 2 3 4 = [trigger,increase frequency, 1Hz, 10ms with ]
+%                                                                      5 6 7 = [15ms,+10ms, even width]
 %						   Outputs mapped: 4         = [Laser]
 
 
 %VARIABLES
 
-int expDuration= 20000    % duration of experiment in ms
+int expDuration= 5000    % duration of experiment in ms
 int totalDuration= 0           % duration of current stimulation 
-int stimWidth= 0                % stimulation duration    [100ms, 500ms, 1000ms]
-int stimFreq= 0                  % stimulation frequency [0.1Hz, 0.2Hz, 1Hz, 4Hz]
+int stimWidth= 10                % stimulation duration in ms
+int stimFreq= 1000                  % stimulation frequency in ms
 int isRunning= 0                % function execution lockout
+int Hertz = 1			%stim freq in Hz
 
 %% CALLBACK VARIABLES
 
@@ -67,21 +68,29 @@ end;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CALLBACKS -- EVENT-DRIVEN TRIGGERS
 
-% Button #1 - 0.1Hz Stimulation Selected
+% Button #1 - trigger stimulation
 callback portin[1] up
-	disp('portin1 up- 0.1Hz Stimulation Selected')
-	stimFreq= 10000 % every 10sec 
+	disp('portin1 up- Stimulating')
 	trigger(1)
 end;
 callback portin[1] down
 	disp('portin1 down')
 end;
 
-% Button #2 - 0.2Hz Stimulation Selected
+% Button #2 - increase stimulation frequency [1,2,5,10,15,....]
 callback portin[2] up
-	disp('portin2 up- 0.2Hz Stimulation Selected')
-	stimFreq= 5000 % every 5sec 
-	trigger(1)
+	disp('portin2 up-Stimulaion Frequency Increased to:')
+	if Hertz==1 do
+		Hertz = 2
+		disp('2 Hz')
+	else if Hertz==2 do
+		Hertz = 5
+		disp('5 Hz')
+	else if Hertz>=5 do
+		Hertz = Hertz+5
+		disp('Increased by 5Hz')
+	end
+	stimFreq = 1000/Hertz
 end;
 callback portin[2] down
 	disp('portin2 down')
@@ -91,37 +100,34 @@ end;
 callback portin[3] up
 	disp('portin3 up- 1Hz Stimulation Selected')
 	stimFreq= 1000 % every 1sec 
-	trigger(1)
+	Hertz = 1
 end;
 callback portin[3] down
 	disp('portin3 down')
 end;
 
-% Button #4 - 4Hz Stimulation Selected
+% Button #4 - +10ms stimulation width
 callback portin[4] up
-	disp('portin4 up- 4Hz Stimulation Selected')
-	stimFreq= 250 % every 250msec 
-	trigger(1)
+	disp('portin4 up-Stimulation width increases by 10ms')
+	stimWidth= 10+stimWidth
 end;
 callback portin[4] down
 	disp('portin4 down')
 end;
 
-% DIP #1 - 100ms Stimulation Width Selected
+% DIP #1 - 15ms Stimulation Width Selected
 callback portin[5] up
-	disp('portin5 up- 100ms Stimulation Width Selected')
-       stimWidth= 100  
-	trigger(1)
+	disp('portin5 up- 15ms Stimulation Width Selected')
+       stimWidth= 15  
 end;
 callback portin[5] down
 	disp('portin5 down')
 end;
 
-% DIP #2 - 500ms Stimulation Width Selected
+% DIP #2 - +10ms Stimulation Width
 callback portin[6] up
-	disp('portin6 up- 500ms Stimulation Width Selected')
-       stimWidth= 500 
-	trigger(1)
+	disp('portin6 up- 10ms Stimulation Width Selected')
+       stimWidth= 10
 end;
 callback portin[6] down
 	disp('portin6 down')
@@ -129,22 +135,11 @@ end;
 
 % DIP #3 - 1000ms Stimulation Width Selected
 callback portin[7] up
-	disp('portin7 up- 1000ms Stimulation Width Selected')
-	 stimWidth= 1000 
-	trigger(1)
+	disp('portin7 up-Even Stimulation Width Selected')
+	 stimWidth= stimFreq/2
 end;
 callback portin[7] down
 	disp('portin7 down')
 end;
-
-callback portin[8] up
-	disp('portin 8 up')
-	disp('  ... variable stimulation ... ')
-	trigger(1)
 	
-end;
-
-callback portin[8] down
-	disp('Portin 8 down')
-end;	
 

@@ -19,8 +19,8 @@
 % Digital Input Assignments
 % ----------------------
 int sample_arm = 1
-int left_arm = 2
-int right_arm  = 3
+int left_arm = 3
+int right_arm  = 4
 % ---------------------
 % Digital Output Assigments
 % ----------------------
@@ -31,7 +31,7 @@ int right_reward = 2
 % ---------------------
 % Odorant Delivery Parameters
 % ----------------------
-int smell_delivery_period = 2000; % milliseconds
+int smell_delivery_period = 2000 % milliseconds
 int smell_one = 3
 int smell_two = 4
 % ---------------------
@@ -54,11 +54,12 @@ int time_until_reset = 200000
 int sampled_well = 0
 int last_sampled_smell = 0
 int current_time = 0
+int time_sampled_well = 0
 % ---------------------
 % Apparatus Tracker
 % ----------------------
 int smell_picked = 0
-inr smell_digital_out = 0;
+int smell_digital_out = 0;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -70,7 +71,7 @@ inr smell_digital_out = 0;
 % administer
 
 % Sample Arm Callback
-callback portin[1]
+callback portin[1] up
 
 	current_time = clock()
 
@@ -99,13 +100,13 @@ end;
 %% DOES ANIMAL CORRECTLY ASSOCIATE?
 
 % LEFT ARM Callback
-callback portin[2]
+callback portin[2] up
 
 	% Describe what's about to happen for matlab callback functions
 	disp('Port 2 Rewarding -- Correct Left Odor Path ...')
 	disp(' ... for smell')
 	disp(smell_picked)
-
+	time_sampled_well = clock()
 	% Adminster reward
 	do in reward_time
 		portout[left_reward] = 1
@@ -116,7 +117,7 @@ callback portin[2]
 end;
 
 % RIGHT ARM Callback
-callback portin[3]
+callback portin[3] up
 	
 	if smell_picked == RIGHT_ODOR_PATH
 		
@@ -124,7 +125,7 @@ callback portin[3]
 		disp('Port 3 Rewarding -- Correct Right Odor Path ...')
 		disp(' ... for smell')
 		disp(smell_picked)
-
+		time_sampled_well = clock()
 		% Adminster reward
 		do in reward_time
 			portout[right_reward] = 1

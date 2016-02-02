@@ -41,7 +41,6 @@ end;
 function 2
 	if lastWell==0 do
 		rewardWell=currWell
-		disp('First poke rewarded')
 		trigger(1)
 	end
 end;
@@ -55,12 +54,10 @@ callback portin[1] up
 	trigger(2)
 	if lastWell == 2 do
 		disp('Poke 1 rewarded')
-		rewardWell=1 % dispense reward from here
+		rewardWell=3 % dispense reward from here
 		trigger(1)% trigger reward
 	else do
-		if lastWell != 0 do
-			disp('Poke 1 not rewarded')
-		end
+		disp('Poke 2 not rewarded')
 	end
 end;
 
@@ -75,12 +72,10 @@ callback portin[2] up
 	trigger(2)
 	if lastWell == 1 do
 		disp('Poke 2 rewarded')
-		rewardWell=2 % dispense reward from here
+		rewardWell=4 % dispense reward from here
 		trigger(1) % trigger reward
 	else do
-		if lastWell != 0 do
-			disp('Poke 2 not rewarded')
-		end
+		disp('Poke 2 not rewarded')
 	end
 end;
 

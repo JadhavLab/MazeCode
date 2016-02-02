@@ -1,14 +1,14 @@
 % PROGRAM NAME: 	OPTOGENETICSSTIMPROTOCOL
 % AUTHOR: 			MCZ
 % DESCRIPTION:          Will pulse the laser at a specified pulse frequency and pulse duration for a specified amount of time. 
-%                                        Inputs mapped:  1 2 3 4 = [0.1Hz, 0.2Hz, 1Hz, 4Hz]
-%                                                                      5 6 7 = [100ms, 500ms, 1000ms]
+%                                        Inputs mapped:  1 2 3 4 = [0.1Hz, 0.2Hz, 1Hz, 30Hz]
+%                                                                      5 6 7 = [15ms, 500ms, 1000ms]
 %						   Outputs mapped: 4         = [Laser]
 
 
 %VARIABLES
 
-int expDuration= 20000    % duration of experiment in ms
+int expDuration= 500    % duration of experiment in ms
 int totalDuration= 0           % duration of current stimulation 
 int stimWidth= 0                % stimulation duration    [100ms, 500ms, 1000ms]
 int stimFreq= 0                  % stimulation frequency [0.1Hz, 0.2Hz, 1Hz, 4Hz]
@@ -99,8 +99,8 @@ end;
 
 % Button #4 - 4Hz Stimulation Selected
 callback portin[4] up
-	disp('portin4 up- 4Hz Stimulation Selected')
-	stimFreq= 250 % every 250msec 
+	disp('portin4 up- 30Hz Stimulation Selected')
+	stimFreq= 33 % every 33msec 
 	trigger(1)
 end;
 callback portin[4] down
@@ -109,8 +109,8 @@ end;
 
 % DIP #1 - 100ms Stimulation Width Selected
 callback portin[5] up
-	disp('portin5 up- 100ms Stimulation Width Selected')
-       stimWidth= 100  
+	disp('portin5 up- 15ms Stimulation Width Selected')
+       stimWidth= 15  
 	trigger(1)
 end;
 callback portin[5] down

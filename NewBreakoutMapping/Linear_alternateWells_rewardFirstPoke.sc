@@ -15,7 +15,8 @@ int currWell= 0            % current well
 int rewardWell= 0       % reward well
 int nowRewarding = 0 % keep track of reward being dispensed
 
-
+int rewardPump1= 3
+int rewardPump2= 4
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FUNCTIONS
 
@@ -40,7 +41,12 @@ end;
 % -----------------------
 function 2
 	if lastWell==0 do
-		rewardWell=currWell
+		if currWell == 1 do
+			rewardWell= rewardPump1
+ 		end
+		if currWell ==2 do
+			rewardWell= rewardPump2
+ 		end
 		disp('First poke rewarded')
 		trigger(1)
 	end
@@ -55,7 +61,7 @@ callback portin[1] up
 	trigger(2)
 	if lastWell == 2 do
 		disp('Poke 1 rewarded')
-		rewardWell=1 % dispense reward from here
+		rewardWell=rewardPump1 % dispense reward from here
 		trigger(1)% trigger reward
 	else do
 		if lastWell != 0 do
@@ -75,7 +81,7 @@ callback portin[2] up
 	trigger(2)
 	if lastWell == 1 do
 		disp('Poke 2 rewarded')
-		rewardWell=2 % dispense reward from here
+		rewardWell=rewardPump2 % dispense reward from here
 		trigger(1) % trigger reward
 	else do
 		if lastWell != 0 do

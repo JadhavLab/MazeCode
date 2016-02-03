@@ -11,7 +11,11 @@
 
 
 %port variables
-int reward_port = 1
+int reward_port1 = 1
+int reward_port2 = 2
+int reward_identity = 0
+int odor1 = 3
+int odor2 = 4
 
 %poke variables
 int nose_in = 0
@@ -27,6 +31,12 @@ int rewards_earned = 0
 int not_exit_condition = 1;
 
 
+function 2
+	do in 500
+		portout[odor1] = 0
+		portout[odor2] = 0
+	end
+end;
 
 function 1
 	not_exit_condition=1
@@ -35,29 +45,40 @@ function 1
 		if nose_in == 1 do
 			nose_held_time = clock() - nose_held_time_start
 		end
-<<<<<<< HEAD
-		if (nose_held_time >=250) && (nose_in == 1) do
-=======
+		trigger(2)
 		if (nose_held_time >=500) && (nose_in == 1) do
->>>>>>> 57450bfdae4431b2475a81101d25d503a83338f0
 			disp('Nose held time is acceptable.')
 			disp(nose_held_time)
-			portout[reward_port] = 1
+			if reward_identity == odor1 do
+				portout[reward_port1] = 1
+			else if reward_identity == odor2 do
+				portout[reward_port2] = 1
+			end
 			not_exit_condition = 0
 			rewards_earned = rewards_earned + 1
 			disp(rewards_earned)
 			do in reward_delivery_time
-				portout[reward_port] = 0
+				portout[reward_port1] = 0
+				portout[reward_port2] = 0
 				disp('reward off')
+				
 			end
 		end
 	end
 end;
 
+
 % Nose Poke Callback
 callback portin[1] up
 	disp('Nose Poke!')
 	nose_in = 1
+	if reward_identity == odor2 do
+		portout[odor1] = 1
+		reward_identity = odor1
+	else do
+		portout[odor2] = 1
+		reward_identity = odor2
+	end
 	nose_held_time_start = clock()
 	trigger(1)
 end;

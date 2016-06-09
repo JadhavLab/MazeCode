@@ -30,8 +30,8 @@ int successCounter = 0;
 
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
-
-function switchActiveWell
+% this function switches active well
+function 1
   disp('Switching active reward well and pump')
   if (activeWell == leftRewardWell) do
     activeWell = rightRewardWell
@@ -43,7 +43,8 @@ function switchActiveWell
   end
 end;
 
-function dispenseReward
+% this function dispenses reward
+function 2
   disp('Now Rewarding')
   disp(rewardWell)
   portout[activePump] = 1 % deliver reward
@@ -53,20 +54,22 @@ function dispenseReward
   successCounter = successCounter + 1
   disp('Times Rewarded:')
   disp(successCounter)
-  trigger(switchActiveWell)
+  trigger(1)
 end;
 
-function checkChoice
+% this function checks and verifies the choice made by the subject. If correct choice, then triggers the function to dispense reward
+function 3
   if (currentWell == activeWell) do
     disp('Correct choice')
     rewardWell == currentWell
-    trigger(dispenseReward)
+    trigger(2)
   else do
     disp('Wrong choice')
   end;
 end;
 
-function endTrial
+% this function asks the operator to end the trial
+function 4
   disp('END OF TRIAL')
   disp('PRESS END TRIAL BUTTON')
 end;
@@ -74,7 +77,7 @@ end;
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
-callback portin[leftRewardWell] down
+callback portin[2] down
   if (trialStart == 1) do % These steps happen at start of trial
     portout[leftLED] = 1 % switching on left LED
     activeWell = leftRewardWell % activating left reward well
@@ -83,24 +86,24 @@ callback portin[leftRewardWell] down
     trialStart = 0 % setting parameters to indicate trial started
   end
   if (successCounter >= 10) do
-    trigger(endTrial)
+    trigger(4)
   end
 end;
 
-callback portin[rightRewardWell] down
+callback portin[3] down
   if (successCounter >= 10) do
-    trigger(endTrial)
+    trigger(4)
   end
 end;
 
-callback portin[leftRewardWell] up
+callback portin[2] up
   disp('nose poke in left reward well')
   currentWell = leftRewardWell
-  trigger(checkChoice)
+  trigger(3)
 end;
 
-callback portin[rightRewardWell] up
+callback portin[3] up
   disp('nose poke in right reward well')
   currentWell = rightRewardWell
-  trigger(checkChoice)
+  trigger(3)
 end;

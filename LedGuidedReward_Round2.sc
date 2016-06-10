@@ -31,19 +31,32 @@ int activeWell = 0 % variable to assign active well
 int activePump = 0 % variable to assign active pump
 int activeLED = 0 % variable to assign active LED
 int currentWell = 0 % variable to indicate the well picked by subject
+int lastWell = 0 % variable to indicate the last well visited
 int rewardCounter = 0 % variable counting number of times rewarded
 
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
 
+function 1
+  portout[activeLED] = 0
+  if (activeWell == odorWell)
 
+    if (startTrial == 1) do
+    end
+    if (lastWell = leftRewardWell)
+    end
+    if (lastWell == rightRewardWell)
+  end
+  if (activeWell == leftRewardWell || activeWell == rightRewardWell)
+    lastWell = activeWell
+  end
+end;
 
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
 callback portin[1] down
   if (startTrial == 1) do
-    startTrial = 0 % flag indicating trial has started
     activeWell = odorWell
     activeLED = odorWellLED
     portout[activeLED] = 1
@@ -54,17 +67,29 @@ end
 callback portin[1] up
   currentWell = odorWell
   disp('Poke in odor well')
-  trigger(1)
+  if (currentWell == activeWell && rewardCounter < 10) d0
+    trigger(1)
+  else do
+    disp('Wrong choice')
+  end
 end
 
 callback portin[2] up
   currentWell = leftRewardWell
   disp('Poke in left reward well')
-  trigger(1)
+  if (currentWell == activeWell && rewardCounter < 10) d0
+    trigger(1)
+  else do
+    disp('Wrong choice')
+  end
 end
 
 callback portin[3] up
   currentWell = rightRewardWell
   disp('Poke in right reward well')
-  trigger(1)
+  if (currentWell == activeWell && rewardCounter < 10) d0
+    trigger(1)
+  else do
+    disp('Wrong choice')
+  end
 end;

@@ -52,3 +52,19 @@ callback portin[1] down
 end
 
 callback portin[1] up
+  currentWell = odorWell
+  disp('Poke in odor well')
+  trigger(1)
+end
+
+callback portin[2] up
+  currentWell = leftRewardWell
+  disp('Poke in left reward well')
+  trigger(1)
+end
+
+callback portin[3] up
+  currentWell = rightRewardWell
+  disp('Poke in right reward well')
+  trigger(1)
+end;

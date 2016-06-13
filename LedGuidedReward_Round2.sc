@@ -40,7 +40,6 @@ int rewardCounter = 0 % variable counting number of times rewarded
 function 1
   portout[activeLED] = 0
   if (activeWell == odorWell)
-
     if (startTrial == 1) do
     end
     if (lastWell = leftRewardWell)

@@ -47,7 +47,7 @@ function 1
       portout[activeLED] = 1 % turning on the left well led
       activeWell = leftRewardWell % setting the active well flag
       activePump = leftRewardWellPump % setting the active pump flag
-      lastWell = odorWell
+      lastWell = odorWell % set flag to indicate last visit
       disp('Subject poked odor well, waiting for subject at left well ... ')
     end
     if (lastWell == leftRewardWell)

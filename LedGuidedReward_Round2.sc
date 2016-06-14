@@ -16,6 +16,7 @@ int leftRewardWell = 2
 int rightRewardWell = 3
 
 % Output Ports
+% odorWellPump =
 int leftRewardWellPump = 1
 int rightRewardWellPump = 2
 int odorWellLED = 5
@@ -36,12 +37,38 @@ int rewardCounter = 0 % variable counting number of times rewarded
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
 
+% This function ends the trial
+function 4
+  portout[activeLED] = 0
+  activeWell = 0
+  activePump = 0
+  activeLED = 0
+  disp('End of Trial.')
+  disp('Waiting on operator')
+  disp('Total successful rewards:')
+  disp(rewardCounter)
+end;
+
+% This function dispenses the reward in appropriate well
+function 3
+  portout[activeWell] = 1 % start dispensing reward
+  disp('Rewarding ... ')
+  do in rewardDuration
+    portout[activeWell] = 0 % stop dispensing reward
+    disp('Rewarding complete.')
+    rewardCounter = rewardCounter + 1
+    lastWell = activeWell
+  end
+  if (rewardCounter >= 10) do
+    trigger(4)
+  end
+end;
+
 % This function initiates the trial and primes the left reward well
 function 2
   if (startTrial == 1) do
     startTrial = 0 % setting flag to indicate start of trial
     activeLED = leftLED % setting flag to indicate the current active led
-    portout[activeLED] = 1 % turning on the left well led
     activeWell = leftRewardWell % setting the active well flag
     activePump = leftRewardWellPump % setting the active pump flag
     lastWell = odorWell % set flag to indicate last visit
@@ -61,17 +88,12 @@ function 1
     trigger(2)
   end
   if (activeWell == leftRewardWell || activeWell == rightRewardWell)
-    portout[activeWell] = 1 % start dispensing reward
-    disp('Rewarding ... ')
-    do in rewardDuration
-      portout[activeWell] = 0 % stop dispensing reward
-      disp('Rewarding complete.')
-      rewardCounter = rewardCounter + 1
-      activeWell = odorWell
-      activeLED = odorWellLED
-      % activePump = odorWellPump
-    end
+    trigger(3)
   end
+  activeWell = odorWell
+  activeLED = odorWellLED
+  % activePump = odorWellPump
+  portout[activeLED] = 1 % LED turned on in appropriate well
 end;
 
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS

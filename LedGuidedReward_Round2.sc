@@ -37,26 +37,40 @@ int rewardCounter = 0 % variable counting number of times rewarded
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
 
+% This function initiates the trial and primes the left reward well
+function 2
+  if (startTrial == 1) do
+    startTrial = 0 % setting flag to indicate start of trial
+    activeLED = leftLED % setting flag to indicate the current active led
+    portout[activeLED] = 1 % turning on the left well led
+    activeWell = leftRewardWell % setting the active well flag
+    activePump = leftRewardWellPump % setting the active pump flag
+    lastWell = odorWell % set flag to indicate last visit
+    disp('Subject poked odor well, waiting for subject at left well ... ')
+  end
+  if (lastWell == leftRewardWell)
+  end
+  if (lastWell == rightRewardWell)
+  end
+end;
+
+
 % This function decides whether the subject made the right choice, sets the variables correctly, toggles the LEDs, and dispenses reward
 function 1
   portout[activeLED] = 0
   if (activeWell == odorWell)
-    if (startTrial == 1) do
-      startTrial = 0 % setting flag to indicate start of trial
-      activeLED = leftLED % setting flag to indicate the current active led
-      portout[activeLED] = 1 % turning on the left well led
-      activeWell = leftRewardWell % setting the active well flag
-      activePump = leftRewardWellPump % setting the active pump flag
-      lastWell = odorWell % set flag to indicate last visit
-      disp('Subject poked odor well, waiting for subject at left well ... ')
-    end
-    if (lastWell == leftRewardWell)
-    end
-    if (lastWell == rightRewardWell)
+    trigger(2)
   end
   if (activeWell == leftRewardWell || activeWell == rightRewardWell)
-    lastWell = activeWell
+    portout[activeWell] = 1 % start dispensing reward
+    do in rewardDuration
+      portout[activeWell] = 0 % stop dispensing reward
+      if (activeWell == leftRewardWell)
 
+      end
+      else do
+      end
+    end
   end
 end;
 

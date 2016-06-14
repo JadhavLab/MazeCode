@@ -66,7 +66,7 @@ end
 callback portin[1] up
   currentWell = odorWell
   disp('Poke in odor well')
-  if (currentWell == activeWell && rewardCounter < 10) d0
+  if (currentWell == activeWell && rewardCounter < 10) do
     trigger(1)
   else do
     disp('Wrong choice')
@@ -76,7 +76,7 @@ end
 callback portin[2] up
   currentWell = leftRewardWell
   disp('Poke in left reward well')
-  if (currentWell == activeWell && rewardCounter < 10) d0
+  if (currentWell == activeWell && rewardCounter < 10) do
     trigger(1)
   else do
     disp('Wrong choice')
@@ -86,7 +86,7 @@ end
 callback portin[3] up
   currentWell = rightRewardWell
   disp('Poke in right reward well')
-  if (currentWell == activeWell && rewardCounter < 10) d0
+  if (currentWell == activeWell && rewardCounter < 10) do
     trigger(1)
   else do
     disp('Wrong choice')

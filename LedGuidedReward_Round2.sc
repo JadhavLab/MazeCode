@@ -56,22 +56,21 @@ end;
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
-callback portin[1] down
+callback portin[1] up
+  currentWell = odorWell
   if (startTrial == 1) do
     activeWell = odorWell
     activeLED = odorWellLED
     portout[activeLED] = 1
     disp('Trial initiated, waiting on subject at odor well ...')
   end
-end
-
-callback portin[1] up
-  currentWell = odorWell
-  disp('Poke in odor well')
-  if (currentWell == activeWell && rewardCounter < 10) do
-    trigger(1)
   else do
-    disp('Wrong choice')
+    disp('Poke in odor well')
+    if (currentWell == activeWell && rewardCounter < 10) do
+      trigger(1)
+    else do
+      disp('Wrong choice')
+    end
   end
 end
 

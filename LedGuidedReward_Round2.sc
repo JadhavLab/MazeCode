@@ -36,20 +36,27 @@ int rewardCounter = 0 % variable counting number of times rewarded
 
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
+
 % This function decides whether the subject made the right choice, sets the variables correctly, toggles the LEDs, and dispenses reward
 function 1
   portout[activeLED] = 0
   if (activeWell == odorWell)
     if (startTrial == 1) do
-      startTrial = 0
-
+      startTrial = 0 % setting flag to indicate start of trial
+      activeLED = leftLED % setting flag to indicate the current active led
+      portout[activeLED] = 1 % turning on the left well led
+      activeWell = leftRewardWell % setting the active well flag
+      activePump = leftRewardWellPump % setting the active pump flag
+      lastWell = odorWell
+      disp('Subject poked odor well, waiting for subject at left well ... ')
     end
-    if (lastWell = leftRewardWell)
+    if (lastWell == leftRewardWell)
     end
     if (lastWell == rightRewardWell)
   end
   if (activeWell == leftRewardWell || activeWell == rightRewardWell)
     lastWell = activeWell
+
   end
 end;
 
@@ -59,9 +66,9 @@ end;
 callback portin[1] up
   currentWell = odorWell
   if (startTrial == 1) do
-    activeWell = odorWell
-    activeLED = odorWellLED
-    portout[activeLED] = 1
+    activeWell = odorWell % setting the odor well as active
+    activeLED = odorWellLED % setting the odor well led as active
+    portout[activeLED] = 1 % switching on the active (odor well) led
     disp('Trial initiated, waiting on subject at odor well ...')
   end
   else do

@@ -16,7 +16,6 @@ int leftRewardWell = 2
 int rightRewardWell = 3
 
 % Output Ports
-int rewardWell = 0
 int leftRewardWellPump = 1
 int rightRewardWellPump = 2
 int odorWellLED = 5
@@ -63,13 +62,14 @@ function 1
   end
   if (activeWell == leftRewardWell || activeWell == rightRewardWell)
     portout[activeWell] = 1 % start dispensing reward
+    disp('Rewarding ... ')
     do in rewardDuration
       portout[activeWell] = 0 % stop dispensing reward
-      if (activeWell == leftRewardWell)
-
-      end
-      else do
-      end
+      disp('Rewarding complete.')
+      rewardCounter = rewardCounter + 1
+      activeWell = odorWell
+      activeLED = odorWellLED
+      % activePump = odorWellPump
     end
   end
 end;

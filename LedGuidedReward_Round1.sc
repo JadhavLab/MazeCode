@@ -14,7 +14,6 @@ int leftRewardWell = 2
 int rightRewardWell = 3
 
 % Output Ports
-int rewardWell = 0
 int leftRewardWellPump = 1
 int rightRewardWellPump = 2
 int odorWellLED = 5

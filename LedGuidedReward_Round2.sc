@@ -36,11 +36,13 @@ int rewardCounter = 0 % variable counting number of times rewarded
 
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
-
+% This function decides whether the subject made the right choice, sets the variables correctly, toggles the LEDs, and dispenses reward
 function 1
   portout[activeLED] = 0
   if (activeWell == odorWell)
     if (startTrial == 1) do
+      startTrial = 0
+
     end
     if (lastWell = leftRewardWell)
     end

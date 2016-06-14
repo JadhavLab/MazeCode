@@ -74,12 +74,19 @@ function 2
     lastWell = odorWell % set flag to indicate last visit
     disp('Subject poked odor well, waiting for subject at left well ... ')
   end
-  if (lastWell == leftRewardWell)
+  if (lastWell == leftRewardWell) do
+    activeWell = rightRewardWell
+    activeLED = rightLED
+    activePump = rightRewardWellPump
+    disp('Right Well activated. Waiting on Subject ... ')
   end
-  if (lastWell == rightRewardWell)
+  if (lastWell == rightRewardWell) do
+    activeWell = leftRewardWell
+    activeLED = leftLED
+    activePump = leftRewardWellPump
+    disp('Left Well activated. Waiting on Subject ... ')
   end
 end;
-
 
 % This function decides whether the subject made the right choice, sets the variables correctly, toggles the LEDs, and dispenses reward
 function 1

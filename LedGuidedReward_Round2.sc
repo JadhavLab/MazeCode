@@ -2,7 +2,7 @@
 % AUTHOR: Suman K. Guha
 % DESCRIPTION: The purpose is the use the association that the animal made with LEDs in the last round to make them alternate between the odor well and the reward wells. LEDs lighting up suggest to the animal that they should investigate that well.
 % REGIME: Odor well LED: Nose poke in odor well, activates a well, nose poke in that well dispenses reward. Repeat ad nauseam.
-% NOTE: The operator has to initiate the trial by activating the odor well. odor well port going down initiates the trial
+% NOTE: The operator has to initiate the trial by activating the odor well.
 
 % CONSTANT DECLARATION
 % ------------------------------------------------------------

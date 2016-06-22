@@ -89,8 +89,13 @@ function 1
     disp('Waiting for subject at odor well ... ')
   else do
     portout[odorWellLED] = 0
-    nextWell = random(2)
-    if (nextWell <= 1) do
+    nextWell = random(10000)
+    if (nextWell == 5000) do
+      while (nextWell == 5000) do every 1
+        nextWell = random(10000)
+      end
+    end
+    if (nextWell < 5000) do
       % sequence for activating left well
       activeWell = leftRewardWell
       activeLED = leftLED

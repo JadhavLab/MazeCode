@@ -6,7 +6,7 @@
 % ------------------------------------------------------------
 
 % Reward delivery duration in miliseconds
-int rewardDuration = 50
+int rewardDuration = 500
 
 % Input Ports
 int odorWell = 1
@@ -49,13 +49,14 @@ end;
 function 2
   if (currentWell == activeWell && rewardCounter < 10) do
     portout[activeLED] = 0
+    activeWell = 0
     portout[activePump] = 1
-    disp(rewardCounter)
-    rewardCounter = rewardCounter + 1
     disp('Rewarding ... ')
     do in rewardDuration
       portout[activePump] = 0
       disp('Rewarding complete.')
+      rewardCounter = rewardCounter + 1
+      disp(rewardCounter)
       if (currentWell == leftRewardWell) do
         activeWell = rightRewardWell
         activeLED = rightLED
@@ -68,10 +69,10 @@ function 2
         activePump = leftRewardWellPump
         disp('Left Well activated. Waiting on Subject ... ')
       end
+      portout[activeLED] = 1
       if (rewardCounter >= 10) do
         trigger(3)
       end
-      portout[activeLED] = 1
     end
   else do
     disp('Wrong Choice')

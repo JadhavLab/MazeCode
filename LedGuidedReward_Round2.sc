@@ -4,15 +4,16 @@
 
 % DESCRIPTION: The purpose is the use the association that the animal made with LEDs in the last round to make them alternate between the odor well and the reward wells. LEDs lighting up suggest to the animal that they should investigate that well. The random() function is used to decide which well the animal should investigate.
 
-% REGIME: Odor well LED: Nose poke in odor well, activates a well, nose poke in that well dispenses reward. Repeat till 10 rewards are dispensed in total. 
+% REGIME: Odor well LED: Nose poke in odor well, activates a well, nose poke in that well dispenses reward. Repeat till 10 rewards are dispensed in total.
 
 % NOTE: The operator has to initiate the trial by activating the odor well.
 
 % CONSTANT DECLARATION
 % ------------------------------------------------------------
 
-% Reward delivery duration in miliseconds
+% Reward delivery duration in miliseconds and maximum rewards to be dispensed
 int rewardDuration = 500
+int maxReward = 20
 
 % Input Ports
 int odorWell = 1
@@ -37,27 +38,44 @@ int activeLED = 0 % variable to assign active LED
 int currentWell = 0 % variable to indicate the well picked by subject
 int lastWell = 0 % variable to indicate the last well visited
 int rewardCounter = 0 % variable counting number of times rewarded
+int nextWell = 0 % variable for deciding in which well the reward will be dispensed.
 
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
 
+function 3
+  portout[activeLED] = 0
+  activeWell = 0
+  activePump = 0
+  activeLED = 0
+  disp('End of Trial.')
+  disp('Waiting on operator')
+  disp('Total successful rewards:')
+  disp(rewardCounter)
+end;
+
 function 2
-  rewardCounter = rewardCounter + 1
-  if (rewardCounter == 10) do
+  if (currentWell == activeWell && rewardCounter < maxReward) do
+    portout[activeLED] = 0
     activeWell = 0
-    activePump = 0
-    activeLED = 0
-    disp('End of Trial.')
-    disp('Waiting on operator')
-    disp('Total successful rewards:')
-    disp(rewardCounter)
+    portout[activePump] = 1
+    disp('Rewarding ... ')
+    do in rewardDuration
+      portout[activePump] = 0
+      disp('Rewarding complete.')
+      rewardCounter = rewardCounter + 1
+      disp(rewardCounter)
+      activeWell = odorWell
+      activeLED = odorWellLED
+      disp('Odor Well activated. Waiting on Subject ... ')
+      portout[activeLED] = 1
+      if (rewardCounter >= maxReward) do
+        activePump = 0
+        trigger(3)
+      end
+    end
   else do
-    activeLED = odorWellLED
-    activeWell = odorWell
-    portout[activeLED] = 1
-    disp(rewardCounter)
-    disp('Odor well LED ON ... ')
-    disp('Waiting for subject at odor well ... ')
+    disp('Wrong Choice')
   end
 end;
 
@@ -71,16 +89,19 @@ function 1
     disp('Waiting for subject at odor well ... ')
   else do
     portout[odorWellLED] = 0
-    if (random(2) < 1) do
+    nextWell = random(2)
+    if (nextWell <= 1) do
       % sequence for activating left well
       activeWell = leftRewardWell
       activeLED = leftLED
       activePump = leftRewardWellPump
+      disp('left reward well activated')
     else do
       % sequence for activating right well
       activeWell = rightRewardWell
       activeLED = rightLED
       activePump = rightRewardWellPump
+      disp('right reward well activated')
     end
     portout[activeLED] = 1
   end

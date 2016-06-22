@@ -67,29 +67,25 @@ function 1
     disp('Waiting for subject at odor well ... ')
   else do
     portout[odorWellLED] = 0
-    if (lastWell == odorWell || lastWell == rightRewardWell) do
-      portout[leftLED] = 1
-      activeLED = leftLED
+    if (random(2) < 1) do
+      % sequence for activating left well
       activeWell = leftRewardWell
+      activeLED = leftLED
       activePump = leftRewardWellPump
-      disp('Left well active ... ')
-      disp('Left well LED ON ... ')
-      disp('Waiting for subject at left well ... ')
     else do
-      portout[rightLED] = 1
-      activeLED = rightLED
+      % sequence for activating right well
       activeWell = rightRewardWell
+      activeLED = rightLED
       activePump = rightRewardWellPump
-      disp('Right well LED ON ... ')
-      disp('Waiting for subject at right well ... ')
     end
+    portout[activeLED] = 1
   end
 end;
 
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
-callback portin[1] up % odor triggered
+callback portin[1] up % odor port triggered
   currentWell = 1
   disp('Poke in odor well')
   if (activeWell == 1) do

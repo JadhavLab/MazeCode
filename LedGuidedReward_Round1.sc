@@ -2,6 +2,10 @@
 % AUTHOR: Suman K. Guha
 % DESCRIPTION: This program delivers reward from each reward well (on a linear track) when the beam is broken, and the animal successfully goes to the well that  has the LED on — each well has an LED separately wired to the ECU. After successful 10 trials, the reward well alternates. After that, Each epoch has two trials of 10 each. After that randomize the LED and reward dispension pattern to make sure direction is not being associated, rather just the LED with food.
 
+% REGIME:
+% DAY 1:  15 min sleep box, 15 min trial, 5 min sleep box, and then transfer to home cage
+% Subsequent days: 15 min sleep box, 15 min trial, 20 min sleep box, 15 min trial, 5 min sleep box, and then transfer to home cage
+
 % CONSTANT DECLARATION
 % ------------------------------------------------------------
 

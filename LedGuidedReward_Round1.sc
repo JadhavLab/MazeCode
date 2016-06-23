@@ -7,6 +7,7 @@
 
 % Reward delivery duration in miliseconds
 int rewardDuration = 500
+int maxReward = 100
 
 % Input Ports
 int odorWell = 1
@@ -47,7 +48,7 @@ end;
 
 % This function checks the choice, switch off LED, and dispense reward. After finishing reward dispensation, swap active well and switch on active well LED and activate pump
 function 2
-  if (currentWell == activeWell && rewardCounter < 10) do
+  if (currentWell == activeWell && rewardCounter < maxReward) do
     portout[activeLED] = 0
     activeWell = 0
     portout[activePump] = 1
@@ -70,7 +71,7 @@ function 2
         disp('Left Well activated. Waiting on Subject ... ')
       end
       portout[activeLED] = 1
-      if (rewardCounter >= 10) do
+      if (rewardCounter >= maxReward) do
         trigger(3)
       end
     end

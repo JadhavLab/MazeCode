@@ -11,7 +11,7 @@
 
 % Reward delivery duration in miliseconds
 int rewardDuration = 500
-int maxReward = 100
+int maxReward = 999
 
 % Input Ports
 int odorWell = 1

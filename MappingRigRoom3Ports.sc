@@ -6,17 +6,19 @@
 % ------------------------------------------------------------
 
 % Input Ports
-int odorWell = 1
-int leftRewardWell = 2
-int rightRewardWell = 3
+int leftRewardWell = 1
+int rightRewardWell = 2
+int odorWell = 5
+
+
 
 % Output Ports
 int rewardWell = 0
-int leftRewardWellPump = 1
-int rightRewardWellPump = 2
-int odorWellLED = 5
-int leftLED = 6
-int rightLED = 7;
+int leftLED = 1
+int rightLED = 2
+int leftRewardWellPump = 3
+int rightRewardWellPump = 4
+int odorWellLED = 5;
 
 % Defining reward delivery duration in miliseconds
 int rewardDuration = 10000
@@ -30,7 +32,7 @@ int rewardDuration = 10000
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
-callback portin[1] up
+callback portin[5] up
   disp('Subject investigating Odor Well')
   portout[odorWellLED] = 1
   disp('Odor Well LED ON')
@@ -40,7 +42,7 @@ callback portin[1] up
   end
 end
 
-callback portin[2] up
+callback portin[1] up
   disp('this is left reward well')
   portout[leftLED] = 1
   disp('Left Well LED ON')
@@ -56,7 +58,7 @@ callback portin[2] up
   end
 end
 
-callback portin[3] up
+callback portin[2] up
   disp('this is right reward well')
   portout[rightLED] = 1
   disp('Right Well LED ON')

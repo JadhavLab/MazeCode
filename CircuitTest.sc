@@ -16,7 +16,7 @@ callback portin[1] up
   portout[14] = 1
   portout[15] = 1
   portout[16] = 1
-  do in 10000
+  do in 5000
     portout[1] = 0
     portout[2] = 0
     portout[3] = 0

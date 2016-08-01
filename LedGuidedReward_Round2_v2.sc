@@ -14,12 +14,11 @@
 % Reward delivery duration in miliseconds and maximum rewards to be dispensed
 int rewardDuration = 500
 int maxReward = 999
-int pulseDuration = 250
 
 % Input Ports
-int odorWell = 5
 int leftRewardWell = 1
 int rightRewardWell = 2
+int odorWell = 5
 
 % Output Ports
 int leftLED = 1
@@ -118,8 +117,8 @@ end;
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
-callback portin[1] up % odor port triggered
-  currentWell = 1
+callback portin[5] up % odor port triggered
+  currentWell = odorWell
   disp('Poke in odor well')
   if (activeWell == 1) do
     disp('Correct choice')
@@ -132,8 +131,8 @@ callback portin[1] up % odor port triggered
 
 end
 
-callback portin[2] up % left well triggered
-  currentWell = 2
+callback portin[1] up % left well triggered
+  currentWell = leftRewardWell
   disp('Poke in left well')
   if (activeWell == 2) do
     disp('Correct choice')
@@ -145,8 +144,8 @@ callback portin[2] up % left well triggered
   end
 end
 
-callback portin[3] up % right well triggered
-  currentWell = 3
+callback portin[2] up % right well triggered
+  currentWell = rightRewardWell
   disp('Poke in right well')
   if (activeWell == 3) do
     disp('Correct choice')

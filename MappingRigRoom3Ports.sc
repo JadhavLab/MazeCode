@@ -10,8 +10,6 @@ int leftRewardWell = 1
 int rightRewardWell = 2
 int odorWell = 5
 
-
-
 % Output Ports
 int rewardWell = 0
 int leftLED = 1

@@ -17,18 +17,18 @@ int maxReward = 999
 int pulseDuration = 250
 
 % Input Ports
-int odorWell = 1
-int leftRewardWell = 2
-int rightRewardWell = 3
+int odorWell = 5
+int leftRewardWell = 1
+int rightRewardWell = 2
 
 % Output Ports
-int leftRewardWellPump = 1
-int rightRewardWellPump = 2
-int leftOdorPump = 3
-int rightOdorPump = 4
+int leftLED = 1
+int rightLED = 2
+int leftRewardWellPump = 3
+int rightRewardWellPump = 4
 int odorWellLED = 5
-int leftLED = 6
-int rightLED = 7;
+int leftOdorPump = 6
+int rightOdorPump = 7;
 
 % VARIABLE DECLARATION
 % ------------------------------------------------------------

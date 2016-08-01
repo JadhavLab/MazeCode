@@ -16,24 +16,24 @@ int rewardDuration = 500
 int maxReward = 999
 
 % Input Ports
-int odorWell = 1
-int leftRewardWell = 2
-int rightRewardWell = 3
+int odorWell = 5
+int leftRewardWell = 1
+int rightRewardWell = 2
 
 % Output Ports
-int leftRewardWellPump = 1
-int rightRewardWellPump = 2
-int leftOdorPump = 3
-int rightOdorPump = 4
+int leftLED = 1
+int rightLED = 2
+int leftRewardWellPump = 3
+int rightRewardWellPump = 4
 int odorWellLED = 5
-int leftLED = 6
-int rightLED = 7;
+int leftOdorPump = 6
+int rightOdorPump = 7;
 
 % VARIABLE DECLARATION
 % ------------------------------------------------------------
 
 int startTrial = 1 % flag indicating trial should be started
-int activeWell = 1 % variable to assign active well
+int activeWell = 5 % variable to assign active well
 int activePump = 0 % variable to assign active pump
 int activeOdorPump = 0
 int activeLED = 0 % variable to assign active LED
@@ -117,10 +117,10 @@ end;
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
-callback portin[1] up % odor port triggered
-  currentWell = 1
+callback portin[5] up % odor port triggered
+  currentWell = odorWell
   disp('Poke in odor well')
-  if (activeWell == 1) do
+  if (activeWell == 5) do
     disp('Correct choice')
     portout[activeLED] = 0
     trigger(1)
@@ -131,10 +131,10 @@ callback portin[1] up % odor port triggered
 
 end
 
-callback portin[2] up % left well triggered
-  currentWell = 2
+callback portin[1] up % left well triggered
+  currentWell = leftRewardWell
   disp('Poke in left well')
-  if (activeWell == 2) do
+  if (activeWell == 1) do
     disp('Correct choice')
     portout[activeLED] = 0
     trigger(2)
@@ -144,10 +144,10 @@ callback portin[2] up % left well triggered
   end
 end
 
-callback portin[3] up % right well triggered
-  currentWell = 3
+callback portin[2] up % right well triggered
+  currentWell = rightRewardWell
   disp('Poke in right well')
-  if (activeWell == 3) do
+  if (activeWell == 2) do
     disp('Correct choice')
     portout[activeLED] = 0
     trigger(2)

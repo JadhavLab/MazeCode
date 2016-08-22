@@ -27,7 +27,7 @@ int rightLED = 2;
 % CALLBACKS:  EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
-callback portin[2] up
+callback portin[1] up
   portout[leftRewardWellPump] = 1
   do in pumpActive
     portout[leftRewardWellPump] = 0
@@ -35,7 +35,7 @@ callback portin[2] up
   end
 end
 
-callback portin[3] up
+callback portin[2] up
   portout[rightRewardWellPump] = 1
   do in pumpActive
     portout[rightRewardWellPump] = 0

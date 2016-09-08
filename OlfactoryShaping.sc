@@ -15,7 +15,7 @@
 
 
 int delay_int = 500
-int nose_in = 0
+int nose_in = 0 % binary variable for determining if the animal nose is in the nose poke
 int rewarded = 0
 int reward_delivery_time = 1000 % duration that milk will be delivered in ms 
 int reward_port = 1
@@ -48,8 +48,9 @@ function 1
 		while not_exit_condition == 1 do every update_time
 			trigger(2)
 			if nose_in == 1 do
-				nose_held_time = clock()
-				nose_held_time = nose_held_time - nose_held_time_start
+				nose_held_time = clock() %updates current time 
+				%calculates the duration the animal has been nose poking
+				nose_held_time = nose_held_time - nose_held_time_start 
 			end
 			disp(nose_held_time_start)
 			if (nose_held_time >=500) && (rewarded == 0) do
@@ -66,10 +67,10 @@ end;
 
 
 % Nose Poke Callback
-callback portin[1] up
+callback portin[1] up 
 	disp('Nose Poke Start!')
-	nose_in = 1
-	nose_held_time_start = clock()
+	nose_in = 1 
+	nose_held_time_start = clock() 
 	disp(nose_held_time)
 
 	trigger(1)

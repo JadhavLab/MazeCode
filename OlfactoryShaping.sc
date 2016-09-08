@@ -4,8 +4,10 @@
 %%  Name:         OlfactoryShaping
 %%
 %%  Purpose:      Runs a task where the animal must hold its nose
-%%				  in the nosepoke for an extended period of time to
-%%				  receive a reward from a reward well
+%%	          in the nosepoke for an extended period of time to
+%%		  receive a reward from a reward well
+%%
+%%  Developed by Wesley Alford and Ryan Young
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -15,7 +17,7 @@
 int delay_int = 500
 int nose_in = 0
 int rewarded = 0
-int reward_delivery_time = 1000
+int reward_delivery_time = 1000 % duration that milk will be delivered in ms 
 int reward_port = 1
 int nose_held_time
 int not_trigger =1

@@ -10,7 +10,6 @@
 
 % Reward delivery duration in miliseconds
 int rewardDuration = 500
-int maxReward = 999
 
 % Input Ports
 int nosePokeWell = 1
@@ -23,14 +22,13 @@ int rewardWellPump = 3;
 
 int rewardCounter = 0 % variable counting number of times rewarded
 
-% CALLBACKS:  EVENT-DRIVEN TRIGGERS
+% CALLBACKS:EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
 
 callback portin[1] up
   disp('successful nose poke')
   portout[rewardWellPump] = 1
   rewardCounter = rewardCounter + 1
-  disp('Successful rewards:')
   disp(rewardCounter)
   do in rewardDuration
     portout[rewardWellPump] = 0

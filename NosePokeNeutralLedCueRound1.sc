@@ -22,6 +22,12 @@ int rewardWellPump = 3;
 
 int rewardCounter = 0 % variable counting number of times rewarded
 int startTrial = 0 % variable that indicates whether trial has started or not
+int clockStart = 0 % variable that indicates start of nose poke
+int currentClock = 0 % variable to store current clock value
+int nosePokeDuration = 0 % variable indicating duration of nose poke
+
+% CLOCK RESET to zero out clock
+clock(reset);
 
 % CALLBACKS:EVENT-DRIVEN TRIGGERS
 % ------------------------------------------------------------
@@ -32,6 +38,7 @@ callback portin[5] up
     startTrial = 1
     disp(startTrial)
   else do
+    clockStart = clock()
     disp('successful nose poke')
     portout[ledBacklight] = 1
     portout[rewardWellPump] = 1
@@ -41,5 +48,13 @@ callback portin[5] up
       portout[ledBacklight] = 0
       portout[rewardWellPump] = 0
     end
+  end
+end
+
+callback portin[5] down % added reporter for nose poke duration
+  if (startTrial == 1) do
+    currentClock = clock()
+    nosePokeDuration = currentClock - clockStart
+    disp(nosePokeDuration)
   end
 end;

@@ -9,6 +9,7 @@
 % ------------------------------------------------------------
 
 int rewardDuration = 500 % duration of reward delivery in miliseconds
+int timeDelay = 500 % time duration for which Led Backlight stays on and then reward gets dispensed
 
 % Input Ports: indicate the ethernet port/ECU pin over which it transmits signal
 int nosePokeWell = 5
@@ -41,12 +42,14 @@ callback portin[5] up
     clockStart = clock()
     disp('successful nose poke')
     portout[ledBacklight] = 1
-    portout[rewardWellPump] = 1
-    rewardCounter = rewardCounter + 1
-    disp(rewardCounter)
-    do in rewardDuration
+    do in timeDelay
       portout[ledBacklight] = 0
-      portout[rewardWellPump] = 0
+      portout[rewardWellPump] = 1
+      rewardCounter = rewardCounter + 1
+      disp(rewardCounter)
+      do in rewardDuration
+        portout[rewardWellPump] = 0
+      end
     end
   end
 end

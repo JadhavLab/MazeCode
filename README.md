@@ -1,4 +1,6 @@
-# MazeCode
-Repository of code used for various maze designs. 
-The code is written in StateScript, which is compiled to control SpikeBox micro-controller. 
-This branch has codes used in Rig Room 3
+# MazeCode: RigRoom3 branch
+This is a repository of code used for ECU I/O to control behaviour. 
+
+The code is written in StateScript, specialized for controlling SpikeGadget Environment Control Unit (ECU) micro-controller. 
+
+This branch contains codes used in Rig Room 3, with individual users having their own folder. 

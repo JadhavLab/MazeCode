@@ -29,7 +29,7 @@ int nose_poke_led = 5
 int left_led = 1
 int right_led = 2
 int vacuum = 8
-
+int beep = 9
 % ---------------------
 % Odor to Path Variables
 % ----------------------
@@ -74,12 +74,11 @@ int consecutive_left = 0
 int consecutive_right = 0
 
 %ADJUST THESE VARIABLES AS NEEDED
-int nose_hold_time = 100 % how long the animal must poke before reward will be available
+int nose_hold_time = 350 % how long the animal must poke before reward will be available
 int smell_delivery_period = 800 
-int vacuum_time = 5000
+int vacuum_time = 8000
 int time_out_period = 4000 %cannot nose poke and recieve odor for this long after initial poke
-int error_time_out_period = 1000
-int percentage_odor_trials = 8 %number between 0 and 9, 0 means no odor only trials, 9 means 90% odor trials. 
+int percentage_odor_trials = 10 %number between 0 and 9, 0 means no odor only trials, 9 means 90% odor trials. 
 
 % ---------------------
 % Apparatus Tracker
@@ -96,7 +95,7 @@ clock(reset);
 
 function 1  %turns on LEDs and activates correct reward well
 
-if correct_trial_counter < 8 do
+if correct_trial_counter < 0 do
 	if odor_picked == 6 do
 		portout[left_led] = 1
 	end
@@ -134,15 +133,15 @@ end;
 function 3 %dispenses odor
 
 if new_trial == 1 do %picks a new odor only at the beginning of each trial
-	if (consecutive_left > 1) || (consecutive_right > 1) do % if there have been more than 2 trials on the same side in a row, choose the other side
-		if consecutive_left > 1 do
+	if (consecutive_left > 2) || (consecutive_right > 2) do % if there have been more than 2 trials on the same side in a row, choose the other side
+		if consecutive_left > 2 do
 			odor_picked = 7
 			disp('Odor picked this trial see next line')
 			disp(odor_picked)
 			consecutive_left = 0
 			consecutive_right = consecutive_right + 1
 		end
-		if consecutive_right > 1 do
+		if consecutive_right > 2 do
 			odor_picked = 6 
 			disp('Odor picked this trial see next line')
 			disp(odor_picked)
@@ -186,16 +185,6 @@ end
 end;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function 5 %error time out
-
-error_time_out = 1
-	disp('Punishment time out in effect')
-do in error_time_out_period
-	error_time_out = 0
-	disp('Error time out over')
-	portout[nose_poke_led] = 1 %turn on nose poke LED
-end
-end;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%   CALLBACK SECTION
@@ -211,7 +200,7 @@ end;
 %% DETECTION OF POKE
 % When a poke is detected, one of the LEDs will turn on
 callback portin[5] up %when portin1 is in up state
-if time_out == 0 && error_time_out == 0 do	
+if time_out == 0 do	
 	disp('Nose Poke!')
 	sound('beep-07')
 	exit_condition = 0
@@ -224,7 +213,11 @@ if time_out == 0 && error_time_out == 0 do
 		if time_held > 50 && time_out == 0 do %deliver odor after this long if time out period not in effect
 			trigger(3) %dispense odor
 		end
-		if  (time_held  >= nose_hold_time) do
+		if  (time_held  >= nose_hold_time) && time_out == 0 do
+			%portout[beep] = 1
+			%do in 300
+			%portout[beep] = 0
+			%end
 				trigger(4) %time out period active
 				do in 1500 	%turn on vacuum in 1.5 seconds
 					portout[vacuum] = 1
@@ -298,7 +291,6 @@ callback portin[1] up   %animal pokes in left reward well
 		if sampled_well == 0 do
 			total_complete_trials = total_complete_trials +1
 			disp(total_complete_trials)
-			trigger(5)
 			if odor_only_trial == 1 do
 				total_odor_only = total_odor_only + 1
 				disp(correct_odor_only)
@@ -364,7 +356,6 @@ callback portin[2] up
 		if sampled_well == 0 do
 			total_complete_trials = total_complete_trials +1
 			disp(total_complete_trials)
-			trigger(5)
 			if odor_only_trial == 1 do
 				total_odor_only = total_odor_only + 1
 				disp(correct_odor_only)

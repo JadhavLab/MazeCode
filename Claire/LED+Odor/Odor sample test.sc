@@ -75,7 +75,7 @@ int consecutive_right = 0
 
 %ADJUST THESE VARIABLES AS NEEDED
 int nose_hold_time = 200 % how long the animal must poke before reward will be available
-int smell_delivery_period = 450 
+int smell_delivery_period = 800 
 int vacuum_time = 5000
 int time_out_period = 1500 %cannot nose poke and recieve odor for this long after initial poke
 int error_time_out_period = 0

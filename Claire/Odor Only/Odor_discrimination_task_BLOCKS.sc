@@ -28,6 +28,7 @@ int nose_poke_led = 5
 int left_led = 1
 int right_led = 2
 int vacuum = 8
+int beep = 9
 
 % ---------------------
 % Odor to Path Variables
@@ -190,6 +191,10 @@ callback portin[5] up %when portin1 is in up state
 			trigger(3)
 		end
 		if  (time_held  >= nose_hold_time) do
+			portout[beep] = 1
+				do in 300
+				portout[beep] = 0
+				end
 			trigger(1)
 			trigger(4)
 			do in 1000 	%turn on vacuum in 1 second

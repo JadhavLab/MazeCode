@@ -28,6 +28,7 @@ int nose_poke_led = 5
 int left_led = 1
 int right_led = 2
 int vacuum = 8
+int beep = 9
 
 % ---------------------
 % Odor to Path Variables
@@ -67,11 +68,12 @@ int first_odor = 0
 int second_odor = 0
 int left_led_on = 0
 int right_led_on = 0
+int nose_poke_attempted = 0
 
 
 %ADJUST THESE VARIABLES AS NEEDED
-int nose_hold_time = 400 % how long the animal must poke before reward will be available
-int smell_delivery_period = 350 
+int nose_hold_time = 600 % how long the animal must poke before reward will be available
+int smell_delivery_period = 600 
 int vacuum_time = 4000
 int vacuum_delay = 1000
 int time_out_period = 1000 %cannot nose poke and recieve odor for this long after initial poke
@@ -178,12 +180,16 @@ if time_out == 0 do
 			trigger(3)
 		end
 		if  (time_held  >= nose_hold_time) && time_out == 0 do
-				do in vacuum_delay 	%turn on vacuum in 1.5 seconds
-					portout[vacuum] = 1
+			portout[beep] = 1
+				do in 300
+				portout[beep] = 0
 				end
-				do in vacuum_time %turn off vacuum after certain amount of time
-					portout[vacuum] = 0
-				end
+			do in vacuum_delay 	%turn on vacuum in 1.5 seconds
+				portout[vacuum] = 1
+			end
+			do in vacuum_time %turn off vacuum after certain amount of time
+				portout[vacuum] = 0
+			end
 
 				if sampled_well == 1 do %if rat has not yet sampled well, turn on LED for correct well
 					trigger(1)
@@ -212,6 +218,7 @@ callback portin[5] down
 	if time_out == 0 do
 		trigger(4)
 	end
+	nose_poke_attempted = 1
 end;
 
 %% DOES ANIMAL CORRECTLY ASSOCIATE?
@@ -219,52 +226,55 @@ end;
 % LEFT ARM Callback
 callback portin[1] up   %animal pokes in left reward well
 	disp('Poke Left Well')
-	
-if (time_held < nose_hold_time) && right_led_on == 0 && left_led_on == 0 do
+if nose_poke_attempted == 1 do	
+	if (time_held < nose_hold_time) && right_led_on == 0 && left_led_on == 0 do
 		nose_hold_errors = nose_hold_errors + 1
 		disp(nose_hold_errors)
-	else do
-	if ( left_led_on == LEFT_PATH_LED ) && (poke_void_tracker != 1) do 
+		nose_poke_attempted = 0
+		else do
+			if ( left_led_on == LEFT_PATH_LED ) && (poke_void_tracker != 1) do 
 
-		% Describe what's about to happen for matlab callback functions
+			% Describe what's about to happen for matlab callback functions
 		
-		disp('Left Well Rewarded')
-		correct_trial_counter = correct_trial_counter + 1
-		total_complete_trials = total_complete_trials +1
+			disp('Left Well Rewarded')
+			correct_trial_counter = correct_trial_counter + 1
+			total_complete_trials = total_complete_trials +1
 					disp(correct_trial_counter)
 					disp(total_complete_trials)
 					if correct_trial_counter == trial_reset do
 					correct_trial_counter = 0
 					end
-		portout[left_pump] = 1  % Administer reward
-		do in reward_time
-			portout[left_pump] = 0
+			portout[left_pump] = 1  % Administer reward
+				do in reward_time
+				portout[left_pump] = 0
+				left_led_on = 0
+				right_led_on = 0
+				end
+	
+			else do
+				if (consecutive_error_tracker < 1) do
+				disp('Not rewarded')
+				end
+				if sampled_well == 0 do
+				total_complete_trials = total_complete_trials +1
+				disp(total_complete_trials)
+				end
+			consecutive_error_tracker = consecutive_error_tracker + 1
 			left_led_on = 0
 			right_led_on = 0
-		end
-
-	else do
-		if (consecutive_error_tracker < 1) do
-			disp('Not rewarded')
-		end
-		if sampled_well == 0 do
-			total_complete_trials = total_complete_trials +1
-			disp(total_complete_trials)
-		end
-		consecutive_error_tracker = consecutive_error_tracker + 1
-		left_led_on = 0
-		right_led_on = 0
-	end
+			end
 	
+		end
+end
 	portout[left_led] = 0 %turn off left LED
 	portout[right_led] = 0 %turn off right LED
 	portout[nose_poke_led] = 1 %turn on nose poke LED
-	disp('nosepoke on')
 	sampled_well = 1
+	nose_poke_attempted = 0
 
 
 	poke_void_tracker = 1
-end
+
 end;
 
 callback portin[1] down
@@ -274,41 +284,44 @@ end;
 % RIGHT ARM Callback
 callback portin[2] up
 	disp('Poke Right Well')
-if (time_held < nose_hold_time) && right_led_on == 0 && left_led_on == 0 do
+if nose_poke_attempted == 1 do	
+	if (time_held < nose_hold_time) && right_led_on == 0 && left_led_on == 0 do
 		nose_hold_errors = nose_hold_errors + 1
 		disp(nose_hold_errors)
+		nose_poke_attempted = 0
 	else do
 	
-	if (right_led_on == RIGHT_PATH_LED) && (poke_void_tracker != 1) do
+		if (right_led_on == RIGHT_PATH_LED) && (poke_void_tracker != 1) do
 		
 		% Describe what's about to happen for matlab callback functions
 		
-		disp('Right Well Rewarded')
-		correct_trial_counter = correct_trial_counter + 1
-		total_complete_trials = total_complete_trials +1
+			disp('Right Well Rewarded')
+			correct_trial_counter = correct_trial_counter + 1
+			total_complete_trials = total_complete_trials +1
 					disp(correct_trial_counter)
 					disp(total_complete_trials)
 					if correct_trial_counter == trial_reset do
 					correct_trial_counter = 0
 					end
-		portout[right_pump] = 1 % Adminster reward
-		do in reward_time
-			portout[right_pump] = 0
-			right_led_on = 0
-			left_led_on = 0
-		end
-	else do 
-		if (consecutive_error_tracker < 1) do
-		disp('Not rewarded')	
-		end
-		if sampled_well == 0 do
+			portout[right_pump] = 1 % Adminster reward
+				do in reward_time
+				portout[right_pump] = 0
+				right_led_on = 0
+				left_led_on = 0
+				end
+		else do 
+			if (consecutive_error_tracker < 1) do
+			disp('Not rewarded')	
+			end
+			if sampled_well == 0 do
 			total_complete_trials = total_complete_trials +1
 			disp(total_complete_trials)
-		end
+			end
 		consecutive_error_tracker	= consecutive_error_tracker + 1
 		right_led_on = 0
 		left_led_on = 0
 		
+		end
 	end
 	portout[right_led] = 0 %turn off right LED
 	portout[left_led] = 0 %turn off left LED
@@ -317,6 +330,7 @@ if (time_held < nose_hold_time) && right_led_on == 0 && left_led_on == 0 do
 
 	poke_void_tracker = 1	
 	sampled_well = 1
+	nose_poke_attempted = 0
 end
 end;
 

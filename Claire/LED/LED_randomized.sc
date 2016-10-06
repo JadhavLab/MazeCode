@@ -29,6 +29,7 @@ int nose_poke_led = 5
 int left_led = 1
 int right_led = 2
 int vacuum = 8
+int beep = 9
 
 % ---------------------
 % Odor to Path Variables
@@ -171,6 +172,10 @@ callback portin[5] up %when portin1 is in up state
 		time_held = clock_update - nose_hold_start
 		disp(time_held)
 		if  (time_held  >= nose_hold_time) && time_out == 0 do
+			portout[beep] = 1
+				do in 300
+				portout[beep] = 0
+				end
 				trigger(3) %turn on correct LED
 				trigger(4) %time out period active
 				if sampled_well == 1 do %if rat has not yet sampled well, turn on LED for correct well

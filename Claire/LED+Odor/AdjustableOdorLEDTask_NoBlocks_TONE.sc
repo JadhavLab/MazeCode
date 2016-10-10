@@ -134,15 +134,15 @@ end;
 function 3 %dispenses odor
 
 if new_trial == 1 do %picks a new odor only at the beginning of each trial
-	if (consecutive_left > 1) || (consecutive_right > 1) do % if there have been more than 2 trials on the same side in a row, choose the other side
-		if consecutive_left > 1 do
+	if (consecutive_left > 2) || (consecutive_right > 2) do % if there have been more than 2 trials on the same side in a row, choose the other side
+		if consecutive_left > 2 do
 			odor_picked = 7
 			disp('Odor picked this trial see next line')
 			disp(odor_picked)
 			consecutive_left = 0
 			consecutive_right = consecutive_right + 1
 		end
-		if consecutive_right > 1 do
+		if consecutive_right > 2 do
 			odor_picked = 6 
 			disp('Odor picked this trial see next line')
 			disp(odor_picked)

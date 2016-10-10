@@ -62,14 +62,14 @@ int second_block = 0
 int left_led_on = 0
 int right_led_on = 0
 int nose_hold_errors = 0
-int time_out_period = 1000
+int time_out_period = 3000
 int time_out = 0
 int nose_poke_attempted = 0
 int total_complete_trials = 0
 
 int trial_reset = 30
 int block_length = 30
-int nose_hold_time = 450 % how long the animal must poke before odor is delivered
+int nose_hold_time = 600 % how long the animal must poke before odor is delivered
 
 % ---------------------
 % Apparatus Tracker
@@ -107,7 +107,6 @@ time_out = 1
 	disp('Time out in effect')
 do in time_out_period
 time_out = 0
-	disp('Time out over')
 
 end
 end;
@@ -136,7 +135,8 @@ if time_out == 0 do
 		time_held = clock_update - nose_hold_start
 		disp(time_held)
 		if  time_held  > nose_hold_time do
-			portout[beep] = 1
+				trigger(4)
+				portout[beep] = 1
 				do in 300
 				portout[beep] = 0
 				end
@@ -157,17 +157,13 @@ if time_out == 0 do
 	time_diff = current_time - last_sampled_smell
 	disp('Time difference between current sampling request and previous, see next line')
 	disp(time_diff)
-
-  end
+end
 end;
 
 callback portin[5] down
 	exit_condition = 1
 	nose_hold_start = 0
 	clock_update = 0
-	if time_out == 0 && time_held > nose_hold_time do
-		trigger(4)
-	end
 	nose_poke_attempted = 1
 	
 end;

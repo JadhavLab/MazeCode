@@ -68,9 +68,9 @@ int nose_poke_attempted = 0
 int total_complete_trials = 0
 
 
-int trial_reset = 30
-int block_length = 30
-int nose_hold_time = 450 % how long the animal must poke before reward is available
+int trial_reset = 20
+int block_length = 10
+int nose_hold_time = 600 % how long the animal must poke before reward is available
 
 % ---------------------
 % Apparatus Tracker
@@ -148,6 +148,7 @@ if time_out == 0 do
 		time_held = clock_update - nose_hold_start
 		disp(time_held)
 		if  time_held  >= nose_hold_time do
+			trigger(4)
 			portout[beep] = 1
 				do in 300
 				portout[beep] = 0
@@ -177,9 +178,6 @@ callback portin[5] down
 	exit_condition = 1
 	nose_hold_start = 0
 	clock_update = 0
-	if time_out == 0 && time_held >= nose_hold_time do
-		trigger(4)
-	end
 	nose_poke_attempted = 1
 	
 end;

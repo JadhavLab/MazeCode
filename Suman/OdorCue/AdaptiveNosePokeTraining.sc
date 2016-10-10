@@ -7,3 +7,43 @@ In the next phase of this trial the duration of nose-poke is set at the average 
 
 % REGIME:
 % A single epoch consists of a 10 min sleep box; 30 min of adaptive nose-poke–reward training; and another 10 mins of sleep box. Total epoch duration = 50 min.
+
+% CONSTANT DECLARATION
+% ------------------------------------------------------------
+% Input Ports: ethernet port/ECU pin over which signal are sent *to* the ECU
+int rewardWell = 1
+int nosePokeWell = 5
+
+%Output Ports: ethernet port/ECU pin over which signals are sent *from* the ECU
+int rewardWellPump =
+int buzzer =
+
+% VARIABLE DECLARATION
+% ------------------------------------------------------------
+
+
+% CALLBACKS:EVENT-DRIVEN TRIGGERS
+% ------------------------------------------------------------
+
+% when nose poke IR beam is broken
+callback portin[5] up
+  if (startTrial ==1) do
+  end
+end
+
+% when nose poke IR beam is re-established
+callback portin[5] down
+  if (startTrial == 0) do
+  else do
+  end
+end
+
+% when reward well IR beam is broken
+callback portin[1] up
+  if (startTrial == 0) do
+  end
+end
+
+% when reward well IR beam is re-established
+callback portin[1] down
+end

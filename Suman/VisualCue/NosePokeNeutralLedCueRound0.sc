@@ -34,11 +34,7 @@ clock(reset);
 % ------------------------------------------------------------
 
 callback portin[5] up
-  if (startTrial == 0) do
-    disp('trial started')
-    startTrial = 1
-    disp(startTrial)
-  else do
+  if (startTrial == 1) do
     clockStart = clock()
     disp('successful nose poke')
     portout[ledBacklight] = 1
@@ -55,7 +51,11 @@ callback portin[5] up
 end
 
 callback portin[5] down % added reporter for nose poke duration
-  if (startTrial == 1) do
+  if (startTrial == 0)
+    disp('trial started')
+    startTrial = 1
+    disp(startTrial)
+  else do
     currentClock = clock()
     nosePokeDuration = currentClock - clockStart
     disp(nosePokeDuration)

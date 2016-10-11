@@ -11,7 +11,7 @@
 % REGIME:
 % ------------------------------------------------------------
 % A single epoch consists of a 10 min sleep box; 30 min of adaptive nose-poke–reward training; and another 10 mins of sleep box. Total epoch duration = 50 min
-% During phase 0 the animal nose pokes, a beep is played, and reward is displayed.
+% During phase 0 the animal nose pokes, a beep is played, and reward is displayed. phase 0 is just for
 
 % CONSTANT DECLARATION
 % ------------------------------------------------------------
@@ -38,12 +38,13 @@ int nosePokeHoldDurationIncrement =
 
 % VARIABLE DECLARATION
 % ------------------------------------------------------------
+int baselineNosePokeHoldDuration = 0
 int clockStart = 0
 int currentClock = 0
-int phase = 0
 int latencyToNosePoke = 0
 int meanNosePokeHoldDuration = 0
 int nosePokeHoldDuration = 0
+int phase = 0
 int requiredNosePokeHoldDuration = 0
 int rewardCounter = 0
 int sampleSize = 0
@@ -52,7 +53,7 @@ int trialStartTime = 0
 
 % FUNCTIONS SECTION
 % ------------------------------------------------------------
-% This function dispenses the reward, increments the rewardCounter by 1 and displays it
+% This function dispenses the reward, increments the rewardCounter by 1 and displays it, and depending on the phase calculates baselineNosePokeHoldDuration
 function 1
   portout[rewardWellPump] = 1
   do in rewardDuration

@@ -66,9 +66,10 @@ int time_out_period = 3000
 int time_out = 0
 int nose_poke_attempted = 0
 int total_complete_trials = 0
+int total_correct_trials = 0
 
-int trial_reset = 30
-int block_length = 30
+int trial_reset = 20
+int block_length = 10
 int nose_hold_time = 600 % how long the animal must poke before odor is delivered
 
 % ---------------------
@@ -186,7 +187,8 @@ if nose_poke_attempted == 1 do
 			disp('Left Well Rewarded')
 			correct_trial_counter = correct_trial_counter + 1
 			total_complete_trials = total_complete_trials +1
-					disp(correct_trial_counter)
+			total_correct_trials = total_correct_trials + 1
+					disp(total_correct_trials)
 					disp(total_complete_trials)
 					if correct_trial_counter == trial_reset do
 					correct_trial_counter = 0
@@ -245,7 +247,8 @@ if nose_poke_attempted == 1 do
 			disp('Right Well Rewarded')
 			correct_trial_counter = correct_trial_counter + 1
 			total_complete_trials = total_complete_trials +1
-					disp(correct_trial_counter)
+			total_correct_trials = total_correct_trials + 1
+					disp(total_correct_trials)
 					disp(total_complete_trials)
 					if correct_trial_counter == trial_reset do
 					correct_trial_counter = 0

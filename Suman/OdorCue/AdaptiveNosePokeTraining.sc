@@ -11,6 +11,7 @@
 % REGIME:
 % ------------------------------------------------------------
 % A single epoch consists of a 10 min sleep box; 30 min of adaptive nose-poke–reward training; and another 10 mins of sleep box. Total epoch duration = 50 min
+% During phase 0 the animal nose pokes, a beep is played, and reward is displayed.
 
 % CONSTANT DECLARATION
 % ------------------------------------------------------------
@@ -39,6 +40,7 @@ int nosePokeHoldDurationIncrement =
 % ------------------------------------------------------------
 int clockStart = 0
 int currentClock = 0
+int phase = 0
 int latencyToNosePoke = 0
 int meanNosePokeHoldDuration = 0
 int nosePokeHoldDuration = 0
@@ -58,15 +60,6 @@ function 1
     rewardCounter = rewardCounter + 1
     disp(rewardCounter)
   end
-end;
-
-%  This function updates the meanNosePokeDuration variable
-function 2
-  currentClock = clock()
-  nosePokeHoldDuration = currentClock - clockStart
-  disp(nosePokeHoldDuration)
-  meanNosePokeHoldDuration = (((sampleSize * meanNosePokeHoldDuration) + nosePokeHoldDuration) / (sampleSize + 1))
-  disp(meanNosePokeHoldDuration)
 end;
 
 % CALLBACKS: EVENT-DRIVEN TRIGGERS
@@ -96,7 +89,15 @@ callback portin[5] down
     disp('NosePoke = Disengaged')
     % Note: using a special variable sampleSize to update mean nose poke duration and not re-purposing rewardCounter to avoid errors due to asynchronous execution in ECU/StateScript
     sampleSize = rewardCounter
-    trigger(2)
-    trigger(1)
+    currentClock = clock()
+    nosePokeHoldDuration = currentClock - clockStart
+    disp(nosePokeHoldDuration)
+    meanNosePokeHoldDuration = (((sampleSize * meanNosePokeHoldDuration) + nosePokeHoldDuration) / (sampleSize + 1))
+    disp(meanNosePokeHoldDuration)
+    if (phase == 0) do
+      trigger(1)
+    else if (phase == 1) do
+
+    end
   end
 end

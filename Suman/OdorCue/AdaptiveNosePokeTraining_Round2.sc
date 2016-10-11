@@ -11,7 +11,7 @@
 % REGIME:
 % ------------------------------------------------------------
 % A single epoch consists of a 10 min sleep box; 30 min of adaptive nose-poke–reward training; and another 10 mins of sleep box. Total epoch duration = 50 min
-% During phase 0 the animal nose pokes, a beep is played, and reward is displayed. phase 0 is just for
+% During phase 0 the animal nose pokes, a beep is played, and reward is displayed. phase 0 is for first five rewards. 
 
 % CONSTANT DECLARATION
 % ------------------------------------------------------------

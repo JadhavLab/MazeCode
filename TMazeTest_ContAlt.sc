@@ -1,7 +1,9 @@
 
 
-int deliverPeriod = 350  % reward duration- adjust this based on pump
+int deliverPeriod1 =500 % reward duration- adjust this based on pump
 
+int deliverPeriod2 =500% reward duration for middle wells- adjust this based on pump
+int delayPeriod = 20000  % 3 sec delay, can be changed
 %VARIABLES
 
 % vars for tracking behavior in maze
@@ -13,33 +15,55 @@ int currWell= 0            	% current well 	... this variable keeps track of whe
 int rewardWell= 0       	% reward well
 int nowRewarding = 0 	% variable that keeps tabs on the reward being dispensed .. when reward is being dispensed and the system is in the midst of executing a reward function, this number hops up to a 1, and then relaxes to 0 when reward is finished.
 
+int homedoor = 30%17
+
 int count= 0                	% blink count
 
 
+int rewardPump1 = 5
+int rewardPump2 = 6
+int rewardPump3 = 7
 
-
+updates off 16
 
 function 1
 	nowRewarding = 1 							% nowRewarding
 		portout[rewardWell]=1 					% reward
-		do in deliverPeriod 						% do after waiting deliverPeriod milliseconds
+		do in deliverPeriod1 						% do after waiting deliverPeriod milliseconds
 			portout[rewardWell]=0 				% reset reward
 			nowRewarding=0 					% no longer rewarding
 		end
 end;
 
 
+function 4
+	nowRewarding = 1 							% nowRewarding
+		portout[rewardWell]=1 					% reward
+		do in deliverPeriod2 						% do after waiting deliverPeriod milliseconds
+			portout[rewardWell]=0 				% reset reward
+			nowRewarding=0 					% no longer rewarding
+		end
+            portout[homedoor] = 1
+            do in delayPeriod
+                      portout[homedoor] = 0
+            end
+end;
 
 function 2
 	if lastWell==0 do
-		rewardWell=currWell
-		trigger(1)
+		rewardWell=rewardPump3
+		trigger(4)
 	end
 end;
 
 function 3
 	if lastSideWell == 0 && (currWell==1 || currWell == 3) do
-		rewardWell=currWell
+		if currWell == 1 do
+		rewardWell= rewardPump1
+ 		end
+		if currWell == 3 do
+		rewardWell= rewardPump2
+ 		end
 		trigger(1)
 	end
 
@@ -57,12 +81,16 @@ callback portin[1] up
 	
 	if lastWell == 2 do					% Check if previous well = center
 		if lastSideWell == 3	do			% Check if side last visited = right
-			disp('Poke 1 rewarded - left ')
-			rewardWell=1 				% dispense reward from here
+			disp('Poke 1 rewarded')
+			rewardWell=rewardPump1 	% dispense reward from here
 			trigger(1)					% trigger reward
+		else do
+			disp('Poke 1 wrong choice - same side')
 		end
-	else do
-		disp('Poke 1 not rewarded - left')
+      else do 
+            if lastWell == 3 do
+                disp('Poke 1 wrong choice - skip home')
+            end
 	end
 end
 
@@ -75,8 +103,8 @@ end
 
 
 
-callback portin[2] up
-	disp('Portin2 up - Center well on') 	% Print state of port 2
+callback portin[8] up
+	disp('portin8 up') 	% Print state of port 2
 
 	% Set current well
 	currWell = 2
@@ -85,22 +113,23 @@ callback portin[2] up
 	trigger(2) 							% Reward if first poke
 	
 	if lastWell == 1 || lastWell == 3 do 	% Did the animal previously visit left/right arm?
-		disp('Poke 2 rewarded - center')
-		rewardWell = 2
-		trigger(1)
-	else do
-		disp('Poke 2 not rewarded - center')
+		disp('Home poke rewarded')
+		rewardWell = rewardPump3
+		trigger(4)
+%           do in 300  % delay of triggering home port door
+%	else do
+%		disp('Poke 2 not rewarded - center')
 	end
 
 end
 
-callback portin[2] down
-	disp('Portin2 down - Center well off')		% Print state of port 2
+callback portin[8] down
+	disp('portin8 down')		% Print state of port 2
 	lastWell=2								% Well center is now the last wel
 end
 
-callback portin[3] up
-	disp('Portin3 up - Right well on')					% Print state of port to terminal
+callback portin[2] up
+	disp('portin2 up')					% Print state of port to terminal
 	
 	% Set current well
 	currWell = 3 						% Set currently active well
@@ -110,19 +139,23 @@ callback portin[3] up
 	
 	if lastWell == 2 do					% Did animal last visit center arm?				
 		if lastSideWell == 1	do			% Was previous side arm left?
-			disp('Poke 3 rewarded - right')
-			rewardWell=3 				% Dispense reward from here
+			disp('Poke 2 rewarded')
+			rewardWell=rewardPump2	% Dispense reward from here
 			trigger(1) 					% Trigger reward
 		else do
-			disp('Poke 3 not rewarded - right')
+			disp('Poke 2 wrong choice - same side')
 		end
+      else do 
+            if lastWell == 1 do
+                disp('Poke 2 wrong choice - skip home')
+            end
 	end
 
 end
 
 
-callback portin[3] down
-	disp('Portin3 down - Right well off')
+callback portin[2] down
+	disp('portin2 down')
 	lastWell=3 							% Well right, now last well
 	lastSideWell = 3
 end;

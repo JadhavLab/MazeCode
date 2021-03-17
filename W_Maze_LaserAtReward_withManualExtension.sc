@@ -1,6 +1,8 @@
+%WMaze code. Laser will trigger at every reward delivery and wont turn off until a trigger is manually given
 
+int deliverPeriod = 500  % reward duration- adjust this based on pump
 
-int deliverPeriod = 350  % reward duration- adjust this based on pump
+int laserTime = 1000 % duration that the laser is on
 
 %VARIABLES
 
@@ -12,11 +14,17 @@ int currWell= 0            	% current well 	... this variable keeps track of whe
 % vars for tracking where and how much reward
 int rewardWell= 0       	% reward well
 int nowRewarding = 0 	% variable that keeps tabs on the reward being dispensed .. when reward is being dispensed and the system is in the midst of executing a reward function, this number hops up to a 1, and then relaxes to 0 when reward is finished.
+int nowLaser = 0 % variable that keeps tabs on when the laser is on
+
 
 int count= 0                	% blink count
 
+int rewardPump1 = 5
+int rewardPump2 = 6
+int rewardPump3 = 7
 
 
+updates off 16
 
 
 function 1
@@ -24,7 +32,14 @@ function 1
 		portout[rewardWell]=1 					% reward
 		do in deliverPeriod 						% do after waiting deliverPeriod milliseconds
 			portout[rewardWell]=0 				% reset reward
-			nowRewarding=0 					% no longer rewarding
+			nowRewarding=0 				% no longer rewarding
+		end				     
+
+	nowLaser = 1
+		portout[4]=1 
+		do in laserTime %laser trigger in milliseconds
+			%portout[4] = 0 %laser off
+			%nowLaser = 0
 		end
 end;
 
@@ -46,6 +61,16 @@ function 3
 end;
 
 
+function 4
+		portout[4] = 1
+end
+
+function 5
+		portout[4] = 0
+end
+
+
+
 callback portin[1] up
 	disp('Portin1 up - Left well on') 		% Print state of port to terminal
 
@@ -58,7 +83,8 @@ callback portin[1] up
 	if lastWell == 2 do					% Check if previous well = center
 		if lastSideWell == 3	do			% Check if side last visited = right
 			disp('Poke 1 rewarded - left ')
-			rewardWell=1 				% dispense reward from here
+			disp('Laser on - Left')
+			rewardWell=rewardPump1 				% dispense reward from here
 			trigger(1)					% trigger reward
 		end
 	else do
@@ -86,7 +112,8 @@ callback portin[2] up
 	
 	if lastWell == 1 || lastWell == 3 do 	% Did the animal previously visit left/right arm?
 		disp('Poke 2 rewarded - center')
-		rewardWell = 2
+		disp('Laser on - Center')
+		rewardWell = rewardPump2
 		trigger(1)
 	else do
 		disp('Poke 2 not rewarded - center')
@@ -99,7 +126,7 @@ callback portin[2] down
 	lastWell=2								% Well center is now the last wel
 end
 
-callback portin[3] up
+callback portin[8] up
 	disp('Portin3 up - Right well on')					% Print state of port to terminal
 	
 	% Set current well
@@ -111,7 +138,8 @@ callback portin[3] up
 	if lastWell == 2 do					% Did animal last visit center arm?				
 		if lastSideWell == 1	do			% Was previous side arm left?
 			disp('Poke 3 rewarded - right')
-			rewardWell=3 				% Dispense reward from here
+			disp('Laser on - Right')
+			rewardWell=rewardPump3 				% Dispense reward from here
 			trigger(1) 					% Trigger reward
 		else do
 			disp('Poke 3 not rewarded - right')
@@ -121,12 +149,24 @@ callback portin[3] up
 end
 
 
-callback portin[3] down
+callback portin[8] down
 	disp('Portin3 down - Right well off')
 	lastWell=3 							% Well right, now last well
 	lastSideWell = 3
 end;
 
 
+callback portin[3] up
+
+	disp('Laser is on')						
+	trigger(4)							
+end
+
+
+callback portin[3] down
+
+	disp('Laser is off')
+trigger(5)	
+end;
 
 

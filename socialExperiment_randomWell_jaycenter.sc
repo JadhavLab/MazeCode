@@ -4,6 +4,7 @@
 
 %VARIABLES
 int deliverPeriod1 =1200 		% reward duration- adjust this based on pump
+int deliverPeriod2 =1200 
 int loopInterval=1 				% just do very fast (1 msec run randomizer again)
 
 int rewardWell= 4      			% reward well (pump number)
@@ -51,6 +52,30 @@ function 1
 	end
 end;
 
+% Reward delivery function (basically we have two animals at matching ports)
+function 2
+	if ((nextWell == 4) ||  (nextWell == currWell)) do
+		portout[rewardWell]=1 					% reward
+		do in deliverPeriod2 						% do after waiting deliverPeriod milliseconds
+			portout[rewardWell]=0 				% reset reward
+		end
+
+	
+		count = count+1
+		disp(count)	
+		nextWell=random(2)+1						% basically if the next well isnt different from this well, keep trying
+		while (nextWell == currWell) do every loopInterval
+			nextWell = random(2)+1
+		then do
+
+			disp(nextWell)
+		end
+	else do
+		disp('Rats sampled, but no reward')	
+	end
+end;
+
+
 
 %
 % beam break functions
@@ -87,7 +112,7 @@ callback portin[2] up
 			disp('Matched pokes in position B2 ')
 			lastWell = 2						% this is the well we're at
 			rewardWell = rewardPump2 	% dispense reward from here		
-			trigger(1)	
+			trigger(2)	
 		end
 	end
 end;
@@ -151,7 +176,7 @@ callback portin[9] up
 			disp('Matched Pokes in position B2 ')
 			rewardWell = rewardPump2 	% dispense reward from here
 			lastWell = 2		
-			trigger(1)					% trigger reward
+			trigger(2)					% trigger reward
 		end
 	end
 end;
